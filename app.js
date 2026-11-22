@@ -119,7 +119,7 @@
     return (
       '<svg class="' +
       (cls || "ic") +
-      '" aria-hidden="true"><use href="icons.svg#' +
+      '" aria-hidden="true"><use href="#' +
       id +
       '"/></svg>'
     );

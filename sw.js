@@ -1,4 +1,4 @@
-const CACHE_NAME = "phuquoc-trip-v4";
+const CACHE_NAME = "phuquoc-trip-v5";
 
 function asset(path) {
   return new URL(path, self.location).href;
