@@ -12,37 +12,11 @@
       padding: calc(2 * var(--u));
     }
 
-    .seg {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-      padding: 4px;
-      border-radius: 14px;
-      background: rgba(10, 22, 32, 0.6);
-      border: 1px solid var(--grout);
-    }
-
-    .seg button {
-      min-height: 40px;
-      border: 0;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--ink-2);
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .seg button[aria-pressed="true"] {
-      background: var(--water);
-      color: var(--on-accent);
-    }
-
     .amount {
       display: flex;
       align-items: baseline;
       gap: var(--u);
-      margin: calc(2 * var(--u)) 0 0;
+      margin: 0;
       border-bottom: 2px solid var(--grout);
       padding-bottom: var(--u);
     }
@@ -198,13 +172,8 @@
 
   <main class="app">
     <section class="pool calc" aria-label="Пересчёт">
-      <div class="seg" role="group" aria-label="Из какой валюты">
-        <button type="button" data-cur="VND" aria-pressed="true">₫ Донг</button>
-        <button type="button" data-cur="USD" aria-pressed="false">$ Доллар</button>
-        <button type="button" data-cur="KZT" aria-pressed="false">₸ Тенге</button>
-      </div>
       <label class="amount">
-        <span class="visually-hidden">Сумма</span>
+        <span class="visually-hidden">Сумма в донгах</span>
         <input type="text" id="amount" value="100 000" inputmode="decimal" autocomplete="off" />
         <span id="cur-sign">₫</span>
       </label>
@@ -256,7 +225,7 @@
       };
       let vndPerUsd = null;
       let kztPerUsd = null;
-      let from = "VND";
+      const from = "VND";
 
       const amountEl = document.getElementById("amount");
       const rateDateEl = document.getElementById("rateDate");
@@ -351,15 +320,6 @@
       }
 
       document.addEventListener("click", function (e) {
-        const c = e.target.closest("[data-cur]");
-        if (c) {
-          from = c.getAttribute("data-cur");
-          document.querySelectorAll("[data-cur]").forEach((b) => b.setAttribute("aria-pressed", String(b === c)));
-          amountEl.value = from === "VND" ? "100 000" : from === "USD" ? "10" : "5 000";
-          renderQuick();
-          compute();
-          return;
-        }
         const q = e.target.closest("[data-q]");
         if (q) {
           amountEl.value = Number(q.getAttribute("data-q")).toLocaleString("ru-RU");
