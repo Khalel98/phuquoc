@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Челлендж · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .challenge-hero {
+      margin-top: var(--u);
+      padding: calc(2.5 * var(--u));
+    }
+
+    .challenge-hero h2 {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+
+    .challenge-hero-lead {
+      margin: var(--u) 0 0;
+      font-size: 14px;
+      color: var(--ink-2);
+    }
+
+    .challenge-xp-wrap {
+      margin-top: calc(2.5 * var(--u));
+    }
+
+    .challenge-xp-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin: 0 0 var(--u);
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    #challenge-xp-label {
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 30px;
+      color: var(--coral);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .challenge-xp-bar {
+      height: 12px;
+      border-radius: 6px;
+      background: repeating-linear-gradient(90deg, var(--grout) 0 10px, transparent 10px 14px);
+      overflow: hidden;
+    }
+
+    .challenge-xp-bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--water), var(--coral));
+    }
+
+    .challenge-level-title {
+      margin: calc(2 * var(--u)) 0 0;
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .challenge-level-num {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    .challenge-stats {
+      margin: 4px 0 0;
+      font-size: 13.5px;
+      color: var(--ink-2);
+    }
+
+    .challenge-badges {
+      display: flex;
+      gap: var(--u);
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin: calc(2 * var(--u)) calc(-2.5 * var(--u)) 0;
+      padding: 0 calc(2.5 * var(--u)) 2px;
+    }
+
+    .challenge-badges::-webkit-scrollbar {
+      display: none;
+    }
+
+    .challenge-badge {
+      flex: 0 0 auto;
+      min-width: 92px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: var(--u) var(--u) calc(1.25 * var(--u));
+      border-radius: 14px;
+      border: 1.5px solid var(--grout);
+      background: rgba(10, 22, 32, 0.5);
+      opacity: 0.5;
+      text-align: center;
+    }
+
+    .challenge-badge.is-unlocked {
+      opacity: 1;
+    }
+
+    .challenge-badge.is-current {
+      border-color: var(--coral);
+      background: var(--coral-soft);
+    }
+
+    .challenge-badge-emoji {
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .challenge-badge-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
+    .challenge-badge-name {
+      font-size: 12.5px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .challenge-legend-card {
+      margin-top: calc(2 * var(--u));
+      padding: calc(2 * var(--u));
+      border-radius: var(--r-card);
+      background: var(--coral);
+      color: #2a1a00;
+    }
+
+    .challenge-legend-card h2 {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .challenge-legend-card p {
+      margin: 4px 0 0;
+      font-size: 14px;
+    }
+
+    .challenge-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: calc(2 * var(--u));
+      margin: calc(2 * var(--u)) 0;
+    }
+
+    .challenge-toolbar p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .challenge-reset {
+      flex-shrink: 0;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: var(--r-pill);
+      border: 1.5px solid var(--grout);
+      background: transparent;
+      color: var(--ink-2);
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .challenge-section-title {
+      margin: calc(3 * var(--u)) 0 var(--u) calc(0.5 * var(--u));
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .challenge-quest-ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      background: var(--tile);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+    }
+
+    .challenge-quest-item {
+      position: relative;
+    }
+
+    .challenge-quest-item + .challenge-quest-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(2 * var(--u));
+      right: 0;
+      border-top: 1px solid var(--grout);
+    }
+
+    .challenge-quest-label {
+      display: grid;
+      grid-template-columns: 26px 28px 1fr;
+      grid-template-areas: "cb emoji body" ". . xp";
+      gap: 4px calc(1.25 * var(--u));
+      align-items: start;
+      padding: calc(1.5 * var(--u)) calc(2 * var(--u));
+      cursor: pointer;
+    }
+
+    .challenge-quest-label:active {
+      background: var(--deck-2);
+    }
+
+    .challenge-quest-cb {
+      grid-area: cb;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      margin: 1px 0 0;
+      border-radius: 8px;
+      border: 2px solid var(--ink-3);
+      background: transparent;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s var(--ease-out), border-color 0.2s;
+    }
+
+    .challenge-quest-cb:checked {
+      background: var(--water);
+      border-color: var(--water);
+    }
+
+    .challenge-quest-cb:checked::after {
+      content: "";
+      width: 6px;
+      height: 11px;
+      border: solid var(--on-accent);
+      border-width: 0 2.5px 2.5px 0;
+      transform: translateY(-1px) rotate(45deg);
+    }
+
+    .challenge-quest-emoji {
+      grid-area: emoji;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .challenge-quest-body {
+      grid-area: body;
+      min-width: 0;
+    }
+
+    .challenge-quest-title {
+      display: block;
+      font-weight: 650;
+      font-size: 15.5px;
+      line-height: 1.35;
+    }
+
+    .challenge-quest-desc {
+      display: block;
+      margin-top: 4px;
+      font-size: 13.5px;
+      color: var(--ink-2);
+      line-height: 1.45;
+    }
+
+    .challenge-quest-xp {
+      grid-area: xp;
+      justify-self: start;
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .challenge-quest-label:has(.challenge-quest-cb:checked) .challenge-quest-title {
+      color: var(--ink-3);
+      text-decoration: line-through;
+      text-decoration-color: var(--water);
+      text-decoration-thickness: 2px;
+    }
+
+    .challenge-quest-label:has(.challenge-quest-cb:checked) .challenge-quest-xp {
+      background: var(--shallow-soft);
+      color: var(--water);
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <a class="icon-btn" href="more.html" aria-label="Назад в «Ещё»"><svg class="ic" aria-hidden="true"><use href="#chevron-left" /></svg></a>
+      <h1 class="appbar-title">Челлендж<span class="appbar-sub">Стань настоящим островитянином</span></h1>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="pool challenge-hero">
+      <h2>Отмечай квесты по ходу поездки</h2>
+      <p class="challenge-hero-lead">Копи XP, поднимай уровень и открой «Легенду Фукуока». Прогресс хранится на этом телефоне.</p>
+      <div class="challenge-xp-wrap">
+        <p class="challenge-xp-label" id="challenge-xp-label-text">
+          <span id="challenge-xp-label">0 / 1240 XP</span>
+          <span>путь к легенде</span>
+        </p>
+        <div class="challenge-xp-bar" role="progressbar" aria-valuemin="0" aria-valuemax="1240" aria-labelledby="challenge-xp-label-text">
+          <div id="challenge-xp-bar-fill" class="challenge-xp-bar-fill"></div>
+        </div>
+      </div>
+      <p id="challenge-level-title" class="challenge-level-title">—</p>
+      <p id="challenge-stats" class="challenge-stats"></p>
+      <div id="challenge-badges" class="challenge-badges" aria-label="Уровни"></div>
+      <div id="challenge-legend-card" class="challenge-legend-card" hidden>
+        <h2>Ты — легенда Фукуока</h2>
+        <p>850+ XP и не меньше 22 квестов — ты прошёл путь от туриста до своего.</p>
+      </div>
+    </section>
+
+    <div class="challenge-toolbar">
+      <p>Легенда: 850+ XP и 22 квеста.</p>
+      <button type="button" class="challenge-reset" id="challenge-reset">Сбросить</button>
+    </div>
+
+    <div id="challenge-quest-list"></div>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <script src="app.js"></script>
+  <script src="challenge-data.js"></script>
+  <script src="challenge-page.js"></script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

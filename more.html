@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Ещё · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .crew {
+      margin-top: var(--u);
+      padding: calc(2.5 * var(--u));
+    }
+
+    .crew h2 {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .crew p {
+      margin: var(--u) 0 0;
+      color: var(--ink-2);
+      font-size: 14.5px;
+    }
+
+    .names {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: calc(2 * var(--u));
+    }
+
+    .names span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px 4px 4px;
+      border-radius: var(--r-pill);
+      background: rgba(10, 22, 32, 0.55);
+      border: 1px solid var(--grout);
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    .names i {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-style: normal;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 14px;
+      background: var(--water);
+      color: var(--on-accent);
+    }
+
+    .names span:nth-child(2) i {
+      background: var(--coral);
+      color: #2a1a00;
+    }
+
+    .names span:nth-child(3) i {
+      background: #8fd3c8;
+      color: #06302a;
+    }
+
+    .names span:nth-child(4) i {
+      background: #f7d58b;
+      color: #3a2800;
+    }
+
+    .group-title {
+      margin: calc(3 * var(--u)) 0 var(--u) calc(0.5 * var(--u));
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <h1 class="appbar-title">Ещё<span class="appbar-sub">Погода, музыка, челлендж</span></h1>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="pool crew" aria-label="Наша компания">
+      <h2>Фукуок · 7 дней на острове</h2>
+      <p>27 ноября – 3 декабря 2026 · Wyndham Grand, Бай Зай</p>
+      <div class="names" aria-label="Кто едет">
+        <span><i>Х</i>Халел</span>
+        <span><i>А</i>Акын</span>
+        <span><i>А</i>Алишер</span>
+        <span><i>А</i>Аида</span>
+      </div>
+    </section>
+
+    <h2 class="group-title">На острове</h2>
+    <div class="group">
+      <a class="row" href="pogoda.html">
+        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#cloud-sun" /></svg></span>
+        <span class="row-body"><p class="row-title">Погода</p><p class="row-sub">Отель, Зуонгдонг и юг · 7 дней</p></span>
+        <span class="row-end"><svg class="ic ic-sm" aria-hidden="true"><use href="#chevron" /></svg></span>
+      </a>
+      <a class="row" href="index.html">
+        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#headphones" /></svg></span>
+        <span class="row-body"><p class="row-title">Аудиогиды</p><p class="row-sub">5 рассказов по ~3 минуты — в карточках мест маршрута</p></span>
+        <span class="row-end"><svg class="ic ic-sm" aria-hidden="true"><use href="#chevron" /></svg></span>
+      </a>
+    </div>
+
+    <h2 class="group-title">Для настроения</h2>
+    <div class="group">
+      <a class="row" href="challenge.html">
+        <span class="row-ic is-coral"><svg class="ic" aria-hidden="true"><use href="#trophy" /></svg></span>
+        <span class="row-body"><p class="row-title">Челлендж</p><p class="row-sub">32 квеста — стань настоящим островитянином</p></span>
+        <span class="row-end"><span id="xp" class="mark" style="color: var(--coral)"></span><svg class="ic ic-sm" aria-hidden="true"><use href="#chevron" /></svg></span>
+      </a>
+      <a class="row" href="music.html">
+        <span class="row-ic is-coral"><svg class="ic" aria-hidden="true"><use href="#music" /></svg></span>
+        <span class="row-body"><p class="row-title">Музыка</p><p class="row-sub">Плеер сайта · добавьте свои MP3</p></span>
+        <span class="row-end"><svg class="ic ic-sm" aria-hidden="true"><use href="#chevron" /></svg></span>
+      </a>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <script src="app.js"></script>
+  <script src="challenge-data.js"></script>
+  <script>
+    (function () {
+      try {
+        const st = JSON.parse(localStorage.getItem("phuquocChallengeV1") || "{}");
+        const done = st.completed || st.done || {};
+        const ids = Array.isArray(done) ? done : Object.keys(done).filter((k) => done[k]);
+        const xp = (window.CHALLENGE_QUESTS || []).filter((q) => ids.indexOf(q.id) !== -1).reduce((s, q) => s + q.xp, 0);
+        if (xp) document.getElementById("xp").textContent = xp + " XP";
+      } catch (e) {
+        /* нет прогресса */
+      }
+    })();
+  </script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

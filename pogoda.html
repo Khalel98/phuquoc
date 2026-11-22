@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Погода · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .wx-place {
+      margin: var(--u) 0 calc(3 * var(--u));
+    }
+
+    .wx-now {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: var(--u);
+      padding: calc(2 * var(--u)) calc(2.5 * var(--u));
+    }
+
+    .wx-now h2 {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .wx-now p {
+      margin: 2px 0 0;
+      color: var(--ink-2);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .wx-temp {
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 52px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--coral);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wx-now .ic {
+      width: 40px;
+      height: 40px;
+      color: var(--coral);
+    }
+
+    .wx-row {
+      display: grid;
+      grid-template-columns: 76px 28px 1fr auto;
+      gap: calc(1.5 * var(--u));
+      align-items: center;
+      padding: calc(1.25 * var(--u)) calc(2 * var(--u));
+      position: relative;
+      font-size: 15px;
+    }
+
+    .wx-row + .wx-row::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(2 * var(--u));
+      right: 0;
+      border-top: 1px solid var(--grout);
+    }
+
+    .wx-row .ic {
+      color: var(--water);
+    }
+
+    .wx-day {
+      font-weight: 650;
+    }
+
+    .wx-day small {
+      display: block;
+      font-size: 12px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    .wx-desc {
+      color: var(--ink-2);
+      font-size: 14px;
+    }
+
+    .wx-t {
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .wx-t span {
+      color: var(--ink-3);
+      font-weight: 600;
+    }
+
+    .wx-row.is-trip .wx-day::after {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--coral);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <a class="icon-btn" href="more.html" aria-label="Назад в «Ещё»"><svg class="ic" aria-hidden="true"><use href="#chevron-left" /></svg></a>
+      <h1 class="appbar-title">Погода<span class="appbar-sub">Прогноз на 7 дней · Open-Meteo</span></h1>
+      <button type="button" class="icon-btn" id="wx-refresh" aria-label="Обновить прогноз"><svg class="ic" aria-hidden="true"><use href="#refresh" /></svg></button>
+    </div>
+  </header>
+
+  <main class="app">
+    <p class="muted" id="wxStatus">Загружаю прогноз…</p>
+    <p class="err" id="wxErr" hidden></p>
+    <div id="wxRoot"></div>
+    <p class="muted">Точкой отмечены дни поездки. Сухой сезон на острове — ноябрь–апрель; короткий ливень всё равно возможен.</p>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const WX_LS = "phuquoc-weather-snapshot-v2";
+      const CITIES = [
+        { name: "Бай Зай · наш отель", lat: 10.3375, lon: 103.8556 },
+        { name: "Зуонгдонг · центр", lat: 10.2167, lon: 103.9583 },
+        { name: "Антхой · юг", lat: 10.0167, lon: 104.0 },
+      ];
+      const TRIP = ["2026-11-27", "2026-12-03"];
+
+      function wmo(code) {
+        const c = Number(code);
+        if (c === 0) return ["sun", "Ясно"];
+        if (c >= 1 && c <= 2) return ["cloud-sun", "Переменная облачность"];
+        if (c === 3) return ["cloud", "Облачно"];
+        if (c === 45 || c === 48) return ["fog", "Туман"];
+        if ((c >= 51 && c <= 67) || (c >= 80 && c <= 82)) return ["rain", c >= 80 ? "Ливень" : "Дождь"];
+        if (c >= 95) return ["storm", "Гроза"];
+        return ["cloud", "Облачно"];
+      }
+
+      const url = (c) =>
+        "https://api.open-meteo.com/v1/forecast?" +
+        new URLSearchParams({ latitude: c.lat, longitude: c.lon, daily: "weather_code,temperature_2m_max,temperature_2m_min", forecast_days: "7", timezone: "Asia/Ho_Chi_Minh" });
+
+      function place(name, d) {
+        const [ic, desc] = wmo(d.weather_code[0]);
+        let rows = "";
+        for (let i = 0; i < d.time.length; i++) {
+          const dt = new Date(d.time[i] + "T12:00:00");
+          const [ri, rd] = wmo(d.weather_code[i]);
+          const trip = d.time[i] >= TRIP[0] && d.time[i] <= TRIP[1];
+          rows +=
+            '<div class="wx-row' + (trip ? " is-trip" : "") + '">' +
+            '<span class="wx-day">' + (i === 0 ? "Сегодня" : dt.toLocaleDateString("ru-RU", { weekday: "short" })) + "<small>" + dt.toLocaleDateString("ru-RU", { day: "numeric", month: "short" }) + "</small></span>" +
+            AppIcon(ri) +
+            '<span class="wx-desc">' + rd + "</span>" +
+            '<span class="wx-t">' + Math.round(d.temperature_2m_max[i]) + "° <span>" + Math.round(d.temperature_2m_min[i]) + "°</span></span></div>";
+        }
+        return (
+          '<section class="wx-place">' +
+          '<div class="pool wx-now"><div><h2>' + name + "</h2><p>" + desc + " · ночью " + Math.round(d.temperature_2m_min[0]) + "°</p></div>" +
+          '<div style="display:flex;align-items:center;gap:8px">' + AppIcon(ic) + '<span class="wx-temp">' + Math.round(d.temperature_2m_max[0]) + "°</span></div></div>" +
+          '<div class="group" style="margin-top:8px">' + rows + "</div></section>"
+        );
+      }
+
+      async function run() {
+        const root = document.getElementById("wxRoot");
+        const status = document.getElementById("wxStatus");
+        const errEl = document.getElementById("wxErr");
+        errEl.hidden = true;
+        status.textContent = "Загружаю прогноз…";
+        try {
+          const res = await Promise.all(
+            CITIES.map(async (c) => {
+              const r = await fetch(url(c));
+              if (!r.ok) throw new Error(r.status);
+              return { c, d: (await r.json()).daily };
+            })
+          );
+          const html = res.map((x) => place(x.c.name, x.d)).join("");
+          root.innerHTML = html;
+          status.textContent = "Обновлено " + new Date().toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" });
+          try {
+            localStorage.setItem(WX_LS, JSON.stringify({ status: status.textContent, html }));
+          } catch (e) {
+            /* хранилище недоступно */
+          }
+        } catch (e) {
+          try {
+            const o = JSON.parse(localStorage.getItem(WX_LS) || "null");
+            if (o && o.html) {
+              root.innerHTML = o.html;
+              status.textContent = o.status + " · без сети, сохранённый прогноз";
+              return;
+            }
+          } catch (x) {
+            /* нет снимка */
+          }
+          status.textContent = "";
+          errEl.hidden = false;
+          errEl.textContent = "Прогноз не загрузился: нет интернета. Подключитесь и обновите.";
+        }
+      }
+
+      document.getElementById("wx-refresh").addEventListener("click", run);
+      run();
+    })();
+  </script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

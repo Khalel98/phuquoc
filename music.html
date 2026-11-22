@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Музыка · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .music-dock {
+      margin-top: var(--u);
+      padding: calc(2.5 * var(--u));
+    }
+
+    .music-dock-top {
+      display: flex;
+      align-items: center;
+      gap: calc(2 * var(--u));
+    }
+
+    .music-dock-visual {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: var(--coral);
+      color: #2a1a00;
+    }
+
+    .music-dock-visual .ic {
+      width: 30px;
+      height: 30px;
+    }
+
+    .music-dock-text {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .music-dock-title {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 20px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .music-dock-meta {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .music-dock-scrub {
+      display: flex;
+      align-items: center;
+      gap: var(--u);
+      margin-top: calc(2.5 * var(--u));
+      font-size: 12px;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .music-dock-scrub input,
+    .music-dock-volume input {
+      flex: 1;
+      min-width: 0;
+      accent-color: var(--water);
+    }
+
+    .music-dock-transport {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: calc(2 * var(--u));
+      margin-top: calc(1.5 * var(--u));
+    }
+
+    .music-dock-transport button {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    #music-btn-play {
+      width: 64px;
+      height: 64px;
+      background: var(--water);
+      color: var(--on-accent);
+    }
+
+    #music-btn-play .ic {
+      width: 28px;
+      height: 28px;
+    }
+
+    .music-dock-volume {
+      display: flex;
+      align-items: center;
+      gap: var(--u);
+      margin-top: calc(1.5 * var(--u));
+      color: var(--ink-2);
+    }
+
+    .music-section-title {
+      margin: calc(3 * var(--u)) 0 var(--u) calc(0.5 * var(--u));
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
+    .music-tracks {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      background: var(--tile);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+    }
+
+    .music-track-row {
+      display: flex;
+      align-items: center;
+      gap: calc(1.5 * var(--u));
+      width: 100%;
+      min-height: 56px;
+      padding: calc(1.25 * var(--u)) calc(2 * var(--u));
+      border: 0;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .music-track-row.is-active {
+      background: var(--shallow-soft);
+    }
+
+    .music-track-num {
+      width: 24px;
+      font-family: var(--font-mark);
+      font-weight: 700;
+      color: var(--coral);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .music-track-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .music-track-title {
+      font-weight: 650;
+    }
+
+    .music-track-artist,
+    .music-track-credit {
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .music-empty-cat {
+      padding: calc(2.5 * var(--u));
+      border-radius: var(--r-card);
+      border: 1.5px dashed var(--grout);
+      color: var(--ink-2);
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <a class="icon-btn" href="more.html" aria-label="Назад в «Ещё»"><svg class="ic" aria-hidden="true"><use href="#chevron-left" /></svg></a>
+      <h1 class="appbar-title">Музыка<span class="appbar-sub">Один плеер с аудиогидами</span></h1>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="pool music-dock" aria-label="Плеер">
+      <div class="music-dock-top">
+        <div class="music-dock-visual" aria-hidden="true"><svg class="ic"><use href="#music" /></svg></div>
+        <div class="music-dock-text">
+          <h2 class="music-dock-title" id="music-now-title">—</h2>
+          <p class="music-dock-meta" id="music-now-credit">Выберите трек из списка</p>
+        </div>
+      </div>
+      <div class="music-dock-scrub">
+        <span class="music-dock-time" id="music-time-current">0:00</span>
+        <input type="range" id="music-progress" min="0" max="1000" value="0" step="1" aria-label="Прогресс" />
+        <span class="music-dock-time" id="music-time-duration">0:00</span>
+      </div>
+      <div class="music-dock-transport">
+        <button type="button" id="music-btn-prev" aria-label="Предыдущий трек"><svg class="ic" aria-hidden="true"><use href="#prev" /></svg></button>
+        <button type="button" id="music-btn-play" aria-label="Воспроизвести"><svg class="ic" aria-hidden="true"><use href="#play" /></svg></button>
+        <button type="button" id="music-btn-next" aria-label="Следующий трек"><svg class="ic" aria-hidden="true"><use href="#next" /></svg></button>
+      </div>
+      <div class="music-dock-volume">
+        <button type="button" class="icon-btn" id="music-btn-mute" aria-label="Без звука"><svg class="ic" aria-hidden="true"><use href="#volume" /></svg></button>
+        <span class="visually-hidden" id="music-vol-label">Громкость</span>
+        <input type="range" id="music-volume" min="0" max="100" value="85" aria-labelledby="music-vol-label" />
+      </div>
+    </section>
+
+    <div id="music-track-list"></div>
+
+    <p class="muted" style="margin-top: calc(2 * var(--u))">
+      Положите свои MP3 в <code>audio/music/</code> и добавьте их в <code>music-data.js</code> — V-pop, народные песни или звуки đàn bầu.
+    </p>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <script src="app.js"></script>
+  <script src="site-audio.js"></script>
+  <script src="music-data.js"></script>
+  <script src="music-page.js"></script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

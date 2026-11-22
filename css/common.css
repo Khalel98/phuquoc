@@ -1,0 +1,677 @@
+@import url("fonts.css");
+
+/* ============================================================
+   Фукуок — «Бассейн курорта»
+   Камень бортика как фон, вода бассейна как оболочка,
+   цифры разметки глубины как время, канат дорожки как прогресс.
+   Всё кратно плитке 8px.
+   ============================================================ */
+
+/* Палитра — прежняя тёмная тропическая: ночное море, бирюза, манго. */
+:root {
+  color-scheme: dark;
+  --u: 8px;
+
+  --deck: #0a1620;
+  --deck-2: #1a303e;
+  --tile: #12232f;
+  --grout: #26465a;
+  --ink: #eaf4f6;
+  --ink-2: #9db9c4;
+  --ink-3: #7f9ca8;
+
+  --water: #14b8a6;
+  --water-deep: #0d1c26;
+  --water-ink: #eaf4f6;
+  --water-ink-2: #8fb0bd;
+  --shallow: #14b8a6;
+  --shallow-soft: rgba(20, 184, 166, 0.16);
+  --on-accent: #032a26;
+
+  --coral: #f4b740;
+  --coral-ink: #f4b740;
+  --coral-soft: rgba(244, 183, 64, 0.13);
+  --sun: #f4b740;
+
+  --ok: #2a9d8f;
+  --danger: #f87171;
+
+  --r-card: 16px;
+  --r-pill: 999px;
+
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mark: "Rubik", ui-rounded, "SF Pro Rounded", -apple-system, sans-serif;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.22);
+  --shadow-2: 0 10px 28px rgba(0, 0, 0, 0.35);
+  --shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.5);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --tabbar-h: 64px;
+  --appbar-h: 56px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  /* старые имена */
+  --bg: var(--deck);
+  --surface: var(--tile);
+  --surface2: var(--deck-2);
+  --border: var(--grout);
+  --text: var(--ink);
+  --muted: var(--ink-2);
+  --accent: var(--water);
+  --accent-dim: var(--shallow-soft);
+  --gold: var(--coral);
+  --gold-dim: var(--coral-soft);
+  --green: var(--ok);
+  --radius: var(--r-card);
+  --font: var(--font-ui);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-padding-top: calc(var(--appbar-h) + var(--safe-t) + var(--u));
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  background-color: var(--deck);
+  background-image:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(20, 184, 166, 0.16), transparent),
+    radial-gradient(ellipse 80% 50% at 100% 60%, rgba(42, 157, 143, 0.1), transparent);
+  background-attachment: fixed;
+  padding-bottom: calc(var(--tabbar-h) + var(--safe-b) + 3 * var(--u));
+}
+
+::selection {
+  background: var(--water);
+  color: var(--on-accent);
+}
+
+input,
+textarea {
+  caret-color: var(--coral);
+}
+
+:focus-visible {
+  outline: 3px solid var(--shallow);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+a {
+  color: var(--water);
+  text-underline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+code {
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--deck-2);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ic {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ic-sm {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- оболочка ---------- */
+
+.app {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 calc(2 * var(--u));
+}
+
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding-top: var(--safe-t);
+  background: color-mix(in srgb, var(--deck) 86%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.appbar.is-scrolled {
+  border-bottom-color: var(--grout);
+}
+
+.appbar-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  height: var(--appbar-h);
+  padding: 0 var(--u) 0 calc(2 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: var(--u);
+}
+
+.appbar-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-mark);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appbar-sub {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.icon-btn:active,
+.icon-btn[aria-pressed="true"] {
+  background: var(--deck-2);
+}
+
+/* таб-бар — полоса глубокой воды */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  background: color-mix(in srgb, var(--water-deep) 92%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--grout);
+  padding-bottom: var(--safe-b);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.tabbar-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  height: var(--tabbar-h);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--water-ink-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.tab-ic {
+  width: 56px;
+  height: 30px;
+  border-radius: var(--r-pill);
+  display: grid;
+  place-items: center;
+  transition: background 0.25s var(--ease-out), color 0.25s, transform 0.15s;
+}
+
+.tab[aria-current="page"] {
+  color: var(--ink);
+}
+
+.tab[aria-current="page"] .tab-ic {
+  background: var(--water);
+  color: var(--on-accent);
+}
+
+.tab:active .tab-ic {
+  transform: scale(0.92);
+}
+
+/* ---------- типографика ---------- */
+
+.h-screen {
+  font-family: var(--font-mark);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: calc(2 * var(--u)) 0 var(--u);
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 0 0 calc(3 * var(--u));
+  color: var(--ink-2);
+  font-size: 15px;
+  max-width: 62ch;
+}
+
+.h-section {
+  font-family: var(--font-mark);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  margin: calc(4 * var(--u)) 0 calc(1.5 * var(--u));
+}
+
+.mark {
+  font-family: var(--font-mark);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.muted {
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.err {
+  color: var(--danger);
+  font-size: 14px;
+}
+
+/* ---------- плитки и списки ---------- */
+
+.card {
+  background: var(--tile);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-1);
+  padding: calc(2 * var(--u));
+}
+
+.group {
+  background: var(--tile);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  margin: 0 0 calc(2 * var(--u));
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: calc(1.5 * var(--u));
+  min-height: 56px;
+  padding: calc(1.5 * var(--u)) calc(2 * var(--u));
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row + .row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(3.5 * var(--u) + 40px);
+  right: 0;
+  border-top: 1px solid var(--grout);
+}
+
+.group.no-ic .row + .row::before {
+  left: calc(2 * var(--u));
+}
+
+.row:active {
+  background: var(--deck-2);
+}
+
+.row-ic {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--shallow-soft);
+  color: var(--water);
+  flex-shrink: 0;
+}
+
+.row-ic.is-coral {
+  background: var(--coral-soft);
+  color: var(--coral-ink);
+}
+
+.row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.row-sub {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+
+.row-end {
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: var(--u);
+  flex-shrink: 0;
+}
+
+/* ---------- кнопки ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--u);
+  min-height: 44px;
+  padding: 0 calc(2 * var(--u));
+  border-radius: var(--r-pill);
+  border: 0;
+  font-weight: 650;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--deck-2);
+  color: var(--ink);
+  transition: transform 0.15s var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--water);
+  color: var(--on-accent);
+}
+
+.btn-coral {
+  background: var(--coral);
+  color: #2a1a00;
+}
+
+.btn-on-water {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+  border: 1px solid var(--grout);
+}
+
+.btn-sm {
+  min-height: 36px;
+  padding: 0 calc(1.5 * var(--u));
+  font-size: 14px;
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* чипы */
+.chips {
+  display: flex;
+  gap: var(--u);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 calc(-2 * var(--u));
+  padding: 2px calc(2 * var(--u)) var(--u);
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 calc(1.75 * var(--u));
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--grout);
+  background: var(--tile);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chip[aria-pressed="true"],
+.chip[aria-selected="true"] {
+  background: var(--water);
+  border-color: var(--water);
+  color: var(--on-accent);
+}
+
+/* поля */
+.field {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 calc(2 * var(--u));
+  border-radius: 12px;
+  border: 1.5px solid var(--grout);
+  background: var(--tile);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.field::placeholder {
+  color: var(--ink-3);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--shallow);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--shallow) 30%, transparent);
+}
+
+/* предупреждение */
+.note {
+  display: flex;
+  gap: calc(1.5 * var(--u));
+  align-items: flex-start;
+  padding: calc(1.5 * var(--u)) calc(2 * var(--u));
+  border-radius: var(--r-card);
+  background: var(--coral-soft);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 0 0 calc(2 * var(--u));
+}
+
+.note .ic {
+  color: var(--coral-ink);
+  margin-top: 1px;
+}
+
+/* ---------- вода (фирменная панель) ---------- */
+
+.pool {
+  position: relative;
+  border-radius: 20px;
+  color: var(--ink);
+  border: 1px solid var(--grout);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(20, 184, 166, 0.26), transparent 52%),
+    radial-gradient(120% 120% at 100% 100%, rgba(244, 183, 64, 0.16), transparent 46%),
+    linear-gradient(135deg, var(--tile), var(--deck-2));
+  overflow: hidden;
+}
+
+/* ---------- лист снизу ---------- */
+
+.sheet[hidden] {
+  display: none !important;
+}
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 24, 31, 0.5);
+  animation: fade-in 0.3s var(--ease-out);
+}
+
+.sheet-panel {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--deck);
+  border-radius: 24px 24px 0 0;
+  box-shadow: var(--shadow-sheet);
+  padding: 0 calc(2 * var(--u)) calc(3 * var(--u) + var(--safe-b));
+  animation: sheet-up 0.42s var(--ease-out);
+}
+
+.sheet-grip {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  margin: 0 calc(-2 * var(--u));
+  background: var(--deck);
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet-grip::before {
+  content: "";
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--grout);
+}
+
+.sheet-close {
+  position: absolute;
+  top: 6px;
+  right: calc(1.5 * var(--u));
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--deck-2);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* шире телефона — то же приложение колонкой */
+@media (min-width: 700px) {
+  .app {
+    padding-bottom: calc(4 * var(--u));
+  }
+}

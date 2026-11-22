@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Документы · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .legs {
+      display: grid;
+      gap: calc(1.5 * var(--u));
+    }
+
+    #docs > .group-title:first-child {
+      margin-top: calc(1.5 * var(--u));
+    }
+
+    .leg {
+      padding: calc(2 * var(--u));
+    }
+
+    .leg-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--ink-2);
+    }
+
+    .leg-code {
+      font-family: var(--font-mark);
+      font-weight: 700;
+      color: var(--coral);
+      font-size: 15px;
+    }
+
+    .leg-main {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: var(--u);
+      margin-top: calc(1.5 * var(--u));
+    }
+
+    .leg-pt b {
+      display: block;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 34px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .leg-pt span {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    .leg-pt.is-end {
+      text-align: right;
+    }
+
+    .leg-plane {
+      color: var(--water);
+      padding-bottom: 22px;
+    }
+
+    .leg-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: calc(1.5 * var(--u));
+      padding-top: calc(1.5 * var(--u));
+      border-top: 1px dashed var(--grout);
+    }
+
+    .leg-foot span {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 7px;
+      background: rgba(10, 22, 32, 0.5);
+      color: var(--ink-2);
+    }
+
+    .hotel {
+      margin-top: calc(1.5 * var(--u));
+      padding: calc(2 * var(--u));
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--u) calc(2 * var(--u));
+      align-items: center;
+    }
+
+    .hotel h2 {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 19px;
+      line-height: 1.2;
+    }
+
+    .hotel p {
+      margin: 4px 0 0;
+      font-size: 13.5px;
+      color: var(--ink-2);
+    }
+
+    .hotel-times {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--u);
+    }
+
+    .hotel-times div {
+      padding: var(--u) calc(1.5 * var(--u));
+      border-radius: 12px;
+      background: var(--deck-2);
+    }
+
+    .hotel-times b {
+      display: block;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 20px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hotel-times span {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    .group-title {
+      margin: calc(3 * var(--u)) 0 var(--u) calc(0.5 * var(--u));
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
+    .pdf-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: var(--deck-2);
+      color: var(--ink-2);
+    }
+
+    .doc-row {
+      padding: 0 var(--u) 0 0;
+      gap: 0;
+      cursor: default;
+    }
+
+    .doc-row:active {
+      background: transparent;
+    }
+
+    .doc-open {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: calc(1.5 * var(--u));
+      min-height: 56px;
+      padding: calc(1.5 * var(--u)) var(--u) calc(1.5 * var(--u)) calc(2 * var(--u));
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .doc-open:active,
+    .doc-dl:active {
+      background: var(--deck-2);
+    }
+
+    .doc-dl {
+      color: var(--water);
+    }
+
+    .row-num {
+      font-family: var(--font-mark);
+      font-weight: 700;
+      color: var(--water);
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <h1 class="appbar-title">Документы<span class="appbar-sub">Бронь FUN&amp;SUN № 12522784</span></h1>
+    </div>
+  </header>
+
+  <main class="app">
+    <div id="docs"></div>
+
+    <h2 class="group-title">Рейсы и отель</h2>
+    <div class="legs">
+      <article class="pool leg" aria-label="Рейс туда">
+        <div class="leg-top"><span>Туда · пт, 27 ноября</span><span class="leg-code">VSV 5356</span></div>
+        <div class="leg-main">
+          <div class="leg-pt"><b>01:35</b><span>Астана · NQZ</span></div>
+          <svg class="ic leg-plane" aria-hidden="true"><use href="#plane" /></svg>
+          <div class="leg-pt is-end"><b>11:05</b><span>Фукуок · PQC</span></div>
+        </div>
+        <div class="leg-foot"><span>SCAT</span><span>Багаж 23 кг</span><span>Ручная кладь 5 кг</span><span>В аэропорту к 22:30</span></div>
+      </article>
+      <article class="pool leg" aria-label="Рейс обратно">
+        <div class="leg-top"><span>Обратно · чт, 3 декабря</span><span class="leg-code">VSV 5339</span></div>
+        <div class="leg-main">
+          <div class="leg-pt"><b>16:00</b><span>Фукуок · PQC</span></div>
+          <svg class="ic leg-plane" aria-hidden="true"><use href="#plane" /></svg>
+          <div class="leg-pt is-end"><b>00:05</b><span>Астана · 4 дек</span></div>
+        </div>
+        <div class="leg-foot"><span>SCAT</span><span>Выезд из отеля до 12:00</span><span>В аэропорту к 13:00</span></div>
+      </article>
+    </div>
+
+    <article class="card hotel" aria-label="Отель">
+      <div>
+        <h2>Wyndham Grand Phu Quoc</h2>
+        <p>Бай Зай, север острова · Deluxe Garden View · завтраки</p>
+      </div>
+      <a class="icon-btn" href="https://www.google.com/maps/search/?api=1&query=Wyndham+Grand+Phu+Quoc" target="_blank" rel="noopener" aria-label="Отель на карте" style="background: var(--shallow-soft); color: var(--water)">
+        <svg class="ic" aria-hidden="true"><use href="#navigate" /></svg>
+      </a>
+      <div class="hotel-times">
+        <div><b>15:00</b><span>Заезд 27.11 · после</span></div>
+        <div><b>12:00</b><span>Выезд 03.12 · до</span></div>
+      </div>
+    </article>
+
+    <h2 class="group-title">Позвонить</h2>
+    <div class="group">
+      <a class="row" href="tel:+84935925099">
+        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#phone" /></svg></span>
+        <span class="row-body"><p class="row-title">FUN&amp;SUN Vietnam</p><p class="row-sub">Трансферы, гид, всё по туру</p></span>
+        <span class="row-num">+84 935 925 099</span>
+      </a>
+      <a class="row" href="tel:+902423102826">
+        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#shield" /></svg></span>
+        <span class="row-body"><p class="row-title">Страховая · Remed</p><p class="row-sub">Болезнь или травма — звонить сразу</p></span>
+        <span class="row-num">+90 242 310 28 26</span>
+      </a>
+      <a class="row" href="https://wa.me/41788560742" target="_blank" rel="noopener">
+        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#message" /></svg></span>
+        <span class="row-body"><p class="row-title">Remed в WhatsApp</p><p class="row-sub">Только текстом</p></span>
+        <span class="row-num">+41 78 856 07 42</span>
+      </a>
+      <a class="row" href="tel:+84903471666">
+        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#passport" /></svg></span>
+        <span class="row-body"><p class="row-title">Посольство РК · дежурный</p><p class="row-sub">Ханой · основной +84 24 3771 3836</p></span>
+        <span class="row-num">+84 90 347 1666</span>
+      </a>
+      <a class="row" href="tel:115">
+        <span class="row-ic is-coral"><svg class="ic" aria-hidden="true"><use href="#alert" /></svg></span>
+        <span class="row-body"><p class="row-title">Экстренные службы</p><p class="row-sub">Полиция 113 · Пожарные 114 · Общий 112</p></span>
+        <span class="row-num">Скорая 115</span>
+      </a>
+    </div>
+
+    <p class="note">
+      <svg class="ic" aria-hidden="true"><use href="#alert" /></svg>
+      <span>Виза не нужна (до 30 дней). Вейпы, IQOS и glo ввозить <b>запрещено</b>. Вывозить нельзя: дуриан, джекфрут, арбуз, кокос, рыбный соус.</span>
+    </p>
+
+
+    <p class="muted" style="margin-top: calc(2 * var(--u))">PDF открываются и без интернета, если сайт хотя бы раз открывали онлайн. На регистрации нужны оригиналы паспортов.</p>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const SECTIONS = [
+        {
+          title: "Авиабилеты",
+          docs: [
+            { icon: "ticket", title: "Билет — Халел", desc: "VSV 5356 / VSV 5339", file: "docs/ticket-khalel.pdf" },
+            { icon: "ticket", title: "Билет — Акын", desc: "VSV 5356 / VSV 5339", file: "docs/ticket-akyn.pdf" },
+          ],
+        },
+        {
+          title: "Отель",
+          docs: [{ icon: "bed", title: "Ваучер Wyndham Grand", desc: "27.11–03.12 · номер и трансферы", file: "docs/voucher-hotel.pdf" }],
+        },
+        {
+          title: "Страховки · Nomad",
+          docs: [
+            { icon: "shield", title: "Страховка — Халел", desc: "Вьетнам · 30 000 $", file: "docs/insurance-khalel.pdf" },
+            { icon: "shield", title: "Страховка — Акын", desc: "Вьетнам · 30 000 $", file: "docs/insurance-akyn.pdf" },
+          ],
+        },
+        {
+          title: "Личные",
+          docs: [{ icon: "passport", title: "Паспорт — Халел", desc: "Скан на случай потери", file: "docs/passport-khalel.pdf" }],
+        },
+        {
+          title: "Памятка",
+          docs: [{ icon: "book", title: "Памятка FUN&SUN", desc: "Виза, деньги, правила, контакты", file: "docs/memo-vietnam.pdf", size: "5,7 МБ" }],
+        },
+        {
+          title: "Оплата тура",
+          docs: [
+            { icon: "receipt", title: "350 000 ₸", desc: "Kaspi · Nash Tour · 20 октября", file: "docs/payment-tour-1.pdf" },
+            { icon: "receipt", title: "751 000 ₸", desc: "Kaspi · Nash Tour · 27 октября", file: "docs/payment-tour-2.pdf" },
+            { icon: "receipt", title: "385 273 ₸", desc: "Перевод Акына · Halyk · 24 октября", file: "docs/transfer-akyn.pdf" },
+          ],
+        },
+      ];
+      const esc = (t) => {
+        const d = document.createElement("div");
+        d.textContent = t;
+        return d.innerHTML;
+      };
+      document.getElementById("docs").innerHTML = SECTIONS.map(
+        (s) =>
+          '<h2 class="group-title">' + esc(s.title) + '</h2><div class="group">' +
+          s.docs
+            .map(
+              (d) =>
+                '<div class="row doc-row">' +
+                '<a class="doc-open" href="' + d.file + '" target="_blank" rel="noopener">' +
+                '<span class="row-ic">' + AppIcon(d.icon) + "</span>" +
+                '<span class="row-body"><p class="row-title">' + esc(d.title) + '</p><p class="row-sub">' + esc(d.desc) + "</p></span>" +
+                '<span class="row-end"><span class="pdf-tag">' + (d.size ? "PDF · " + esc(d.size) : "PDF") + "</span></span></a>" +
+                '<a class="icon-btn doc-dl" href="' + d.file + '" download="' + esc(d.title.replace(/[\\/:*?"<>|]/g, "")) + '.pdf" aria-label="Скачать: ' + esc(d.title) + '">' +
+                AppIcon("download") + "</a></div>"
+            )
+            .join("") +
+          "</div>"
+      ).join("");
+
+      // При открытии через file:// браузер игнорирует download — сохраняем PDF через blob.
+      if (location.protocol === "file:") {
+        const saveBlob = (b64, name) => {
+          const bin = atob(b64);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = name;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 10000);
+        };
+        document.getElementById("docs").addEventListener("click", (e) => {
+          const link = e.target.closest(".doc-dl");
+          if (!link) return;
+          e.preventDefault();
+          const file = link.getAttribute("href");
+          const name = link.getAttribute("download");
+          const store = (window.__pdfBlobs = window.__pdfBlobs || {});
+          if (store[file]) return saveBlob(store[file], name);
+          const s = document.createElement("script");
+          s.src = file + ".js";
+          s.onload = () => store[file] && saveBlob(store[file], name);
+          s.onerror = () => window.open(file, "_blank");
+          document.head.appendChild(s);
+        });
+      }
+    })();
+  </script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

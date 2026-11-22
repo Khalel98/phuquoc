@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Фукуок · 27 ноября – 3 декабря</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* ---------- «Сегодня» ---------- */
+    .today {
+      margin-top: var(--u);
+      padding: calc(2.5 * var(--u)) calc(2.5 * var(--u)) calc(2 * var(--u));
+    }
+
+    .today-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--u);
+      margin-bottom: calc(1.5 * var(--u));
+    }
+
+    .state-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 0 12px;
+      border-radius: var(--r-pill);
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .state-pill.is-water {
+      background: var(--shallow-soft);
+      color: var(--water);
+    }
+
+    .state-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .today-day {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    .today-time {
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(56px, 18vw, 76px);
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--coral);
+      margin: 0;
+    }
+
+    .today-time small {
+      font-size: 0.32em;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: var(--ink-2);
+      margin-left: 6px;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--u);
+      margin: 0;
+    }
+
+    .countdown div {
+      text-align: center;
+      padding: var(--u) 0 calc(0.75 * var(--u));
+      border-radius: 12px;
+      background: rgba(10, 22, 32, 0.55);
+      border: 1px solid var(--grout);
+    }
+
+    .countdown b {
+      display: block;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: clamp(28px, 9vw, 38px);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+    }
+
+    .countdown span {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
+    .today-title {
+      margin: calc(1.25 * var(--u)) 0 0;
+      font-size: 19px;
+      font-weight: 650;
+      line-height: 1.3;
+      text-wrap: pretty;
+    }
+
+    .today-now {
+      margin: var(--u) 0 0;
+      font-size: 14px;
+      color: var(--ink-2);
+    }
+
+    .today-now b {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .today-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--u);
+      margin-top: calc(2 * var(--u));
+    }
+
+    /* канат дорожки — прогресс дня */
+    .rope {
+      display: flex;
+      align-items: center;
+      margin-top: calc(2.5 * var(--u));
+      padding-top: calc(2 * var(--u));
+      border-top: 1px dashed var(--grout);
+    }
+
+    .rope-bead {
+      position: relative;
+      flex: 0 0 auto;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--ink-3);
+      background: transparent;
+    }
+
+    .rope-seg {
+      flex: 1 1 auto;
+      height: 4px;
+      margin: 0 3px;
+      border-radius: 2px;
+      background: repeating-linear-gradient(90deg, var(--grout) 0 6px, transparent 6px 10px);
+    }
+
+    .rope-bead.is-done {
+      background: var(--water);
+      border-color: var(--water);
+    }
+
+    .rope-seg.is-done {
+      background: var(--water);
+    }
+
+    .rope-bead.is-now {
+      width: 18px;
+      height: 18px;
+      background: var(--coral);
+      border-color: var(--coral);
+      box-shadow: 0 0 0 5px var(--coral-soft);
+      animation: bead 2.4s var(--ease-out) infinite;
+    }
+
+    @keyframes bead {
+      0% {
+        box-shadow: 0 0 0 0 rgba(244, 183, 64, 0.5);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(244, 183, 64, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(244, 183, 64, 0);
+      }
+    }
+
+    .rope-legend {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---------- лента дней ---------- */
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin: calc(3 * var(--u)) 0 calc(2 * var(--u));
+    }
+
+    .day {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: var(--u) 0 calc(1.25 * var(--u));
+      border-radius: 14px;
+      border: 1.5px solid var(--grout);
+      background: var(--tile);
+      cursor: pointer;
+      min-height: 64px;
+    }
+
+    .day-wd {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-2);
+    }
+
+    .day-num {
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 22px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .day .ic {
+      position: absolute;
+      top: -7px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      padding: 2px;
+      border-radius: 50%;
+      background: var(--coral);
+      color: #2a1a00;
+    }
+
+    .day.is-today::after {
+      content: "";
+      position: absolute;
+      bottom: 5px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--coral);
+    }
+
+    .day[aria-pressed="true"] {
+      background: var(--water);
+      border-color: var(--water);
+      color: var(--on-accent);
+    }
+
+    .day[aria-pressed="true"] .day-wd {
+      color: var(--on-accent);
+    }
+
+    .day[aria-pressed="true"].is-today::after {
+      background: var(--on-accent);
+    }
+
+    .day-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--u);
+      margin: 0 0 var(--u);
+    }
+
+    .day-head h2 {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+    }
+
+    .day-head span {
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    /* ---------- таймлайн ---------- */
+    .tl {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ev {
+      display: grid;
+      grid-template-columns: 58px 20px 1fr;
+      column-gap: var(--u);
+      position: relative;
+    }
+
+    .ev-time {
+      padding-top: 14px;
+      text-align: right;
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 17px;
+      font-variant-numeric: tabular-nums;
+      color: var(--coral);
+      line-height: 1.1;
+    }
+
+    .ev-time small {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--ink-3);
+      margin-top: 2px;
+    }
+
+    .ev-rail {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ev-rail::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: repeating-linear-gradient(180deg, var(--grout) 0 7px, transparent 7px 11px);
+    }
+
+    .ev:first-child .ev-rail::before {
+      top: 18px;
+    }
+
+    .ev:last-child .ev-rail::before {
+      bottom: auto;
+      height: 18px;
+    }
+
+    .ev-rail i {
+      position: relative;
+      margin-top: 16px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--deck);
+      border: 2.5px solid var(--ink-3);
+    }
+
+    .ev-body {
+      margin: 6px 0;
+      padding: calc(1.25 * var(--u)) calc(1.5 * var(--u));
+      border-radius: 14px;
+      background: var(--tile);
+      border: 1px solid var(--grout);
+      min-width: 0;
+    }
+
+    .ev-body.is-link {
+      cursor: pointer;
+    }
+
+    .ev-body.is-link:active {
+      background: var(--deck-2);
+    }
+
+    .ev-prog {
+      margin: 0;
+      font-size: 15.5px;
+      line-height: 1.4;
+      text-wrap: pretty;
+    }
+
+    .ev-cost {
+      margin: 6px 0 0;
+      font-size: 13.5px;
+      color: var(--ink-2);
+      line-height: 1.4;
+    }
+
+    .ev-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: var(--u);
+    }
+
+    .mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: var(--r-pill);
+      border: 0;
+      background: var(--shallow-soft);
+      color: var(--water);
+      font-size: 13.5px;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .mini.is-ghost {
+      background: transparent;
+      color: var(--ink-2);
+      padding: 0 4px 0 8px;
+    }
+
+    .mini .ic {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* шкала важности: сейчас > далее > потом > прошло */
+    .ev.is-past .ev-body {
+      background: transparent;
+      border-style: dashed;
+    }
+
+    .ev.is-past .ev-prog,
+    .ev.is-past .ev-time {
+      color: var(--ink-3);
+    }
+
+    .ev.is-past .ev-rail i {
+      background: var(--water);
+      border-color: var(--water);
+    }
+
+    .ev.is-past .ev-rail::before {
+      background: var(--water);
+      opacity: 0.55;
+    }
+
+    .ev.is-now .ev-rail i {
+      width: 18px;
+      height: 18px;
+      margin-top: 14px;
+      background: var(--coral);
+      border-color: var(--coral);
+      box-shadow: 0 0 0 5px var(--coral-soft);
+    }
+
+    .ev.is-now .ev-body {
+      border-color: var(--coral);
+      box-shadow: 0 0 0 1px var(--coral) inset, var(--shadow-1);
+    }
+
+    .ev.is-now .ev-time {
+      font-size: 20px;
+    }
+
+    .ev.is-next .ev-rail i {
+      border-color: var(--water);
+    }
+
+    .ev.is-next .ev-body {
+      border-color: color-mix(in srgb, var(--water) 55%, var(--grout));
+    }
+
+    .ev-tag {
+      display: inline-block;
+      margin: 0 0 6px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .ev.is-next .ev-tag {
+      background: var(--shallow-soft);
+      color: var(--water);
+    }
+
+    /* поиск */
+    .search-wrap[hidden] {
+      display: none;
+    }
+
+    .search-wrap {
+      padding: var(--u) 0 0;
+    }
+
+    .search-day {
+      margin: calc(3 * var(--u)) 0 var(--u);
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--ink-2);
+    }
+
+    .empty {
+      padding: calc(4 * var(--u)) calc(2 * var(--u));
+      text-align: center;
+      color: var(--ink-2);
+      border: 1.5px dashed var(--grout);
+      border-radius: var(--r-card);
+    }
+
+    /* ---------- лист места ---------- */
+    .gallery {
+      position: relative;
+      margin: 0 calc(-2 * var(--u));
+    }
+
+    .gallery-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      gap: var(--u);
+      padding: 0 calc(2 * var(--u));
+      scroll-padding: 0 calc(2 * var(--u));
+    }
+
+    .gallery-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .gallery-track img {
+      flex: 0 0 100%;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 16px;
+      scroll-snap-align: start;
+      background: var(--deck-2);
+    }
+
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: var(--u);
+    }
+
+    .gallery-dots i {
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--grout);
+      transition: width 0.25s var(--ease-out), background 0.25s;
+    }
+
+    .gallery-dots i.is-on {
+      width: 18px;
+      background: var(--water);
+    }
+
+    .place-title {
+      margin: calc(2 * var(--u)) 0 var(--u);
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 26px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      text-wrap: balance;
+    }
+
+    .place-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0 0 calc(2 * var(--u));
+    }
+
+    .place-meta span {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: var(--deck-2);
+      color: var(--ink-2);
+    }
+
+    .place-meta span.is-time {
+      background: var(--coral-soft);
+      color: var(--coral);
+      font-family: var(--font-mark);
+      font-weight: 700;
+    }
+
+    .place-body p {
+      margin: 0 0 calc(1.5 * var(--u));
+      font-size: 15.5px;
+      line-height: 1.55;
+    }
+
+    .tips {
+      margin: calc(2.5 * var(--u)) 0 0;
+      padding: calc(2 * var(--u));
+      border-radius: var(--r-card);
+      background: var(--coral-soft);
+    }
+
+    .tips h3 {
+      margin: 0 0 var(--u);
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--coral);
+    }
+
+    .tips ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tips li {
+      position: relative;
+      padding-left: 18px;
+      margin: 0 0 var(--u);
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+
+    .tips li:last-child {
+      margin-bottom: 0;
+    }
+
+    .tips li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 8px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--coral);
+    }
+
+    /* аудиогид */
+    .guide {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 6px calc(1.5 * var(--u));
+      align-items: center;
+      margin: 0 0 calc(2 * var(--u));
+      padding: calc(1.5 * var(--u));
+      border-radius: var(--r-card);
+      background: var(--tile);
+      border: 1px solid var(--grout);
+    }
+
+    .guide[hidden] {
+      display: none;
+    }
+
+    .guide-play {
+      grid-row: span 2;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 0;
+      background: var(--water);
+      color: var(--on-accent);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .guide-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 650;
+      line-height: 1.3;
+    }
+
+    .guide-title small {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    .guide-scrub {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .guide-scrub input {
+      flex: 1;
+      min-width: 0;
+      accent-color: var(--water);
+      height: 24px;
+    }
+
+    .guide-skip {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink-2);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .guide-skip:disabled,
+    .guide-scrub input:disabled {
+      opacity: 0.4;
+    }
+
+    .routes {
+      display: grid;
+      gap: var(--u);
+      margin-top: calc(2.5 * var(--u));
+    }
+
+    .routes .btn {
+      width: 100%;
+      min-height: 52px;
+      font-size: 16px;
+    }
+
+    .routes-hint {
+      margin: var(--u) 0 0;
+      font-size: 12.5px;
+      color: var(--ink-3);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <h1 class="appbar-title">Фукуок<span class="appbar-sub" id="appbar-sub">27 ноября – 3 декабря</span></h1>
+      <button type="button" class="icon-btn" id="search-toggle" aria-label="Поиск по маршруту" aria-pressed="false">
+        <svg class="ic" aria-hidden="true"><use href="#search" /></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="app">
+    <div class="search-wrap" id="search-wrap" hidden>
+      <label class="visually-hidden" for="q">Поиск по маршруту</label>
+      <input class="field" type="search" id="q" placeholder="Пляж, остров, ресторан, шоу…" autocomplete="off" enterkeyhint="search" />
+    </div>
+
+    <section class="pool today" id="today" aria-live="polite"></section>
+
+    <nav class="days" id="days" aria-label="Дни поездки"></nav>
+
+    <section id="schedule" aria-live="polite"></section>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <div class="sheet" id="place-sheet" hidden>
+    <div class="sheet-backdrop" data-sheet-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="place-title" tabindex="-1">
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <button type="button" class="sheet-close" data-sheet-close aria-label="Закрыть">
+        <svg class="ic ic-sm" aria-hidden="true"><use href="#close" /></svg>
+      </button>
+      <div class="gallery">
+        <div class="gallery-track" id="gallery-track"></div>
+        <div class="gallery-dots" id="gallery-dots" aria-hidden="true"></div>
+      </div>
+      <h2 class="place-title" id="place-title"></h2>
+      <div class="place-meta" id="place-meta"></div>
+      <div class="guide" id="guide" hidden>
+        <button type="button" class="guide-play" id="guide-play" aria-label="Слушать аудиогид">
+          <svg class="ic" aria-hidden="true"><use href="#headphones" /></svg>
+        </button>
+        <p class="guide-title" id="guide-title"></p>
+        <div class="guide-scrub">
+          <button type="button" class="guide-skip" id="guide-back" aria-label="Назад 10 секунд"><svg class="ic ic-sm" aria-hidden="true"><use href="#rewind" /></svg></button>
+          <span id="guide-cur">0:00</span>
+          <input type="range" id="guide-progress" min="0" max="1000" value="0" aria-label="Прогресс аудиогида" />
+          <span id="guide-dur">--:--</span>
+          <button type="button" class="guide-skip" id="guide-fwd" aria-label="Вперёд 10 секунд"><svg class="ic ic-sm" aria-hidden="true"><use href="#forward" /></svg></button>
+        </div>
+      </div>
+      <div class="place-body" id="place-body"></div>
+      <div class="routes" id="routes"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="places-info.js"></script>
+  <script src="places-images.js"></script>
+  <script src="place-routes.js"></script>
+  <script src="site-audio.js"></script>
+  <script id="data" type="application/json">
+[
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "01:35", "program": "Вылет из Астаны рейсом SCAT VSV 5356 (NQZ → PQC). В аэропорту быть к 22:30 26 ноября — за 3 часа.", "cost": "Багаж 23 кг + ручная кладь 5 кг на человека", "date": "2026-11-27", "tz": "+05:00"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "11:05", "program": "Прилёт в международный аэропорт Фукуок (PQC). Паспортный контроль, SIM-карта, обмен денег.", "cost": "SIM ≈ 200 000–300 000 ₫", "date": "2026-11-27"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "12:00", "program": "Групповой трансфер FUN&SUN в отель Wyndham Grand Phu Quoc. Ищите представителя с табличкой FUN&SUN Kazakhstan.", "cost": "Трансфер включён в тур", "date": "2026-11-27"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "13:00", "program": "Приезд в отель, вещи — в камеру хранения. Первый обед рядом с отелем: фо и бань ми.", "cost": "Средний чек ≈ 150 000–250 000 ₫ на человека", "date": "2026-11-27"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "15:00", "program": "Заселение в номер Deluxe Garden View (завтраки включены). Отдых у бассейна.", "cost": "Депозит при заселении — уточните на ресепшен", "date": "2026-11-27"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "17:30", "program": "Закат на пляже Бай Зай у отеля — солнце садится прямо в море.", "cost": "", "date": "2026-11-27"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "19:00", "program": "Вечерняя прогулка по Grand World — «город, который не спит»: венецианский канал, гондолы, Бамбуковый храм.", "cost": "Вход бесплатный, гондола ≈ 200 000 ₫", "date": "2026-11-27"},
+  {"day": 1, "label": "27 ноября · пт", "title": "1 день · 27 ноября · пт", "time": "20:30", "program": "Первый ужин в Grand World.", "cost": "Средний чек ≈ 250 000–400 000 ₫ на человека", "date": "2026-11-27"},
+  {"day": 2, "label": "28 ноября · сб", "title": "2 день · 28 ноября · сб", "time": "08:00", "program": "Завтрак в отеле (включён).", "cost": "", "date": "2026-11-28"},
+  {"day": 2, "label": "28 ноября · сб", "title": "2 день · 28 ноября · сб", "time": "09:30", "program": "Встреча с отельным гидом FUN&SUN в холле: экскурсии, правила, контакты. Взять ваучер и обратный билет.", "cost": "Точное время встречи скажет представитель на трансфере", "date": "2026-11-28"},
+  {"day": 2, "label": "28 ноября · сб", "title": "2 день · 28 ноября · сб", "time": "10:00", "program": "Vinpearl Safari — крупнейший сафари-парк Вьетнама, 5–10 минут от отеля.", "cost": "Билет ≈ 650 000 ₫ (комбо с VinWonders выгоднее)", "date": "2026-11-28"},
+  {"day": 2, "label": "28 ноября · сб", "title": "2 день · 28 ноября · сб", "time": "13:30", "program": "Обед в парке.", "cost": "Средний чек ≈ 200 000 ₫ на человека", "date": "2026-11-28"},
+  {"day": 2, "label": "28 ноября · сб", "title": "2 день · 28 ноября · сб", "time": "14:30", "program": "VinWonders Фукуок: аттракционы, океанариум, аквапарк, замок.", "cost": "Билет ≈ 950 000 ₫", "date": "2026-11-28"},
+  {"day": 2, "label": "28 ноября · сб", "title": "2 день · 28 ноября · сб", "time": "20:00", "program": "Шоу «Tinh Hoa Việt Nam» в Grand World и ужин.", "cost": "Шоу ≈ 300 000–600 000 ₫, ужин ≈ 250 000 ₫", "date": "2026-11-28"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "08:00", "program": "Завтрак в отеле.", "cost": "", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "09:00", "program": "Выезд на юг острова в Антхой (≈ 1 час на Grab/Xanh SM).", "cost": "Такси ≈ 400 000–500 000 ₫ за машину в одну сторону", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "10:00", "program": "Канатная дорога на остров Хон Тхом — 7,9 км над морем.", "cost": "Билет ≈ 600 000–650 000 ₫ (включает аквапарк)", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "11:00", "program": "Аквапарк Aquatopia и пляж острова Хон Тхом.", "cost": "", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "14:00", "program": "Обед на острове Хон Тхом.", "cost": "Средний чек ≈ 200 000–300 000 ₫ на человека", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "16:30", "program": "Sunset Town — «Город заката». Мост Поцелуя, набережная, закат.", "cost": "Вход в город бесплатный", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "19:30", "program": "Шоу «Kiss of the Sea» — фонтаны, лазеры, пиротехника над морем.", "cost": "Билет ≈ 500 000–700 000 ₫", "date": "2026-11-29"},
+  {"day": 3, "label": "29 ноября · вс", "title": "3 день · 29 ноября · вс", "time": "21:00", "program": "Ужин в Sunset Town и возвращение в отель (≈ 1 час).", "cost": "Средний чек ≈ 250 000–400 000 ₫ на человека", "date": "2026-11-29"},
+  {"day": 4, "label": "30 ноября · пн 🎂", "title": "4 день · 30 ноября · пн 🎂", "time": "07:30", "program": "Ранний завтрак.", "cost": "", "date": "2026-11-30"},
+  {"day": 4, "label": "30 ноября · пн 🎂", "title": "4 день · 30 ноября · пн 🎂", "time": "08:00", "program": "Морская прогулка по 4 островам архипелага Антхой: снорклинг у кораллов (трансфер из отеля).", "cost": "Тур ≈ 600 000–900 000 ₫ (трансфер, маска, обед) — можно купить у гида", "date": "2026-11-30"},
+  {"day": 4, "label": "30 ноября · пн 🎂", "title": "4 день · 30 ноября · пн 🎂", "time": "12:30", "program": "Обед на лодке или на острове — морепродукты и фрукты.", "cost": "Обычно входит в стоимость тура", "date": "2026-11-30"},
+  {"day": 4, "label": "30 ноября · пн 🎂", "title": "4 день · 30 ноября · пн 🎂", "time": "16:00", "program": "Возвращение в отель, отдых у бассейна.", "cost": "", "date": "2026-11-30"},
+  {"day": 4, "label": "30 ноября · пн 🎂", "title": "4 день · 30 ноября · пн 🎂", "time": "18:30", "program": "🎂 Праздничный ужин в честь дня рождения Халела — ресторан у моря с закатом.", "cost": "Средний чек ≈ 500 000–800 000 ₫ на человека", "date": "2026-11-30"},
+  {"day": 4, "label": "30 ноября · пн 🎂", "title": "4 день · 30 ноября · пн 🎂", "time": "21:00", "program": "Вьетнамский массаж после морского дня.", "cost": "60 мин ≈ 300 000–500 000 ₫", "date": "2026-11-30"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "08:00", "program": "Завтрак в отеле.", "cost": "", "date": "2026-12-01"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "09:00", "program": "Пляж Бай Сао — белый песок и бирюзовая вода на юго-востоке (≈ 1 час от отеля).", "cost": "Шезлонг ≈ 50 000–100 000 ₫", "date": "2026-12-01"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "12:00", "program": "Обед в пляжном ресторане на Бай Сао.", "cost": "Средний чек ≈ 200 000–350 000 ₫ на человека", "date": "2026-12-01"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "13:30", "program": "Пагода Хо Куок — буддийский храм на скале над морем.", "cost": "Вход бесплатный, нужна закрытая одежда", "date": "2026-12-01"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "15:00", "program": "Историческая тюрьма Фукуок («Кокосовая тюрьма») — музей войны.", "cost": "Вход бесплатный", "date": "2026-12-01"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "16:30", "program": "Фабрика рыбного соуса нуок-мам и перечная плантация.", "cost": "Вход бесплатный", "date": "2026-12-01"},
+  {"day": 5, "label": "1 декабря · вт", "title": "5 день · 1 декабря · вт", "time": "18:30", "program": "Ужин в рыбацкой деревне Хамнинь на сваях — крабы и гребешки.", "cost": "Средний чек ≈ 400 000–700 000 ₫ на человека", "date": "2026-12-01"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "08:00", "program": "Завтрак в отеле.", "cost": "", "date": "2026-12-02"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "09:30", "program": "Пляж морских звёзд Рачвем на северо-востоке (≈ 30 минут от отеля).", "cost": "Небольшой сбор за въезд/парковку", "date": "2026-12-02"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "12:30", "program": "Обед в плавучем ресторане в Рачвем.", "cost": "Средний чек ≈ 250 000–400 000 ₫ на человека", "date": "2026-12-02"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "14:30", "program": "Отдых в отеле: бассейн, вьетнамский кофе со сгущёнкой.", "cost": "Кофе ≈ 30 000–60 000 ₫", "date": "2026-12-02"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "17:00", "program": "Храм Динь Кау на скале в Зуонгдонге — закат и рыбацкие лодки.", "cost": "Вход бесплатный", "date": "2026-12-02"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "18:30", "program": "Прощальный ужин на ночном рынке Зуонгдонга: морепродукты на гриле, бун куай.", "cost": "Ужин ≈ 300 000–500 000 ₫ на человека", "date": "2026-12-02"},
+  {"day": 6, "label": "2 декабря · ср", "title": "6 день · 2 декабря · ср", "time": "21:00", "program": "Проверить время обратного трансфера: после 19:00 его вывешивают на ресепшен или в папке FUN&SUN.", "cost": "", "date": "2026-12-02"},
+  {"day": 7, "label": "3 декабря · чт", "title": "7 день · 3 декабря · чт", "time": "08:00", "program": "Завтрак, сборы вещей. Последнее купание.", "cost": "", "date": "2026-12-03"},
+  {"day": 7, "label": "3 декабря · чт", "title": "7 день · 3 декабря · чт", "time": "10:00", "program": "Последние покупки рядом с отелем: перец, кофе, сушёное манго.", "cost": "Перец ≈ 100 000–200 000 ₫ за пачку", "date": "2026-12-03"},
+  {"day": 7, "label": "3 декабря · чт", "title": "7 день · 3 декабря · чт", "time": "12:00", "program": "Выселение до 12:00 (багаж — в камеру хранения). Групповой трансфер в аэропорт — время уточнить накануне.", "cost": "Трансфер включён в тур. Оплатите мини-бар и доп. услуги", "date": "2026-12-03"},
+  {"day": 7, "label": "3 декабря · чт", "title": "7 день · 3 декабря · чт", "time": "16:00", "program": "Вылет рейсом SCAT VSV 5339 (PQC → NQZ). Прилёт в Астану 4 декабря в 00:05.", "cost": "Багаж 23 кг + ручная кладь 5 кг", "date": "2026-12-03"}
+]
+  </script>
+
+  <script>
+    (function () {
+      const PQC_OFFSET = 7 * 3600 * 1000;
+      /* Отладка: ?now=2026-11-29T15:00+07:00 — посмотреть экран как в этот момент; ?open=16 — открыть карточку места. */
+      const params = new URLSearchParams(location.search);
+      const NOW_OVR = params.get("now") ? Date.parse(params.get("now")) : NaN;
+      const T0 = Date.now();
+      const clock = () => (isFinite(NOW_OVR) ? NOW_OVR + (Date.now() - T0) : Date.now());
+      const WD = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
+      const MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+
+      const items = JSON.parse(document.getElementById("data").textContent).map(function (row, i) {
+        row._i = i;
+        row.ts = Date.parse(row.date + "T" + row.time + ":00" + (row.tz || "+07:00"));
+        return row;
+      });
+      const days = [...new Set(items.map((i) => i.day))].sort((a, b) => a - b);
+      const dayDate = {};
+      items.forEach((i) => (dayDate[i.day] = dayDate[i.day] || i.date));
+      const tripStart = items[0].ts;
+      const tripEnd = items[items.length - 1].ts + 9 * 3600 * 1000;
+
+      const $ = (id) => document.getElementById(id);
+      const todayEl = $("today");
+      const daysEl = $("days");
+      const scheduleEl = $("schedule");
+      const qEl = $("q");
+      const searchWrap = $("search-wrap");
+      const searchToggle = $("search-toggle");
+
+      const I = window.AppIcon;
+      const places = window.EVENT_PLACES || [];
+
+      function esc(t) {
+        const d = document.createElement("div");
+        d.textContent = t == null ? "" : String(t);
+        return d.innerHTML;
+      }
+
+      function pqcDate(ms) {
+        return new Date(ms + PQC_OFFSET).toISOString().slice(0, 10);
+      }
+
+      function dateParts(iso) {
+        const d = new Date(iso + "T12:00:00Z");
+        return { wd: WD[d.getUTCDay()], n: d.getUTCDate(), m: MONTHS[d.getUTCMonth()] };
+      }
+
+      function plural(n, a, b, c) {
+        const m10 = n % 10, m100 = n % 100;
+        if (m10 === 1 && m100 !== 11) return a;
+        if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return b;
+        return c;
+      }
+
+      function untilText(ms) {
+        const min = Math.max(0, Math.round(ms / 60000));
+        if (min < 1) return "сейчас";
+        if (min < 60) return "через " + min + " мин";
+        const h = Math.floor(min / 60), m = min % 60;
+        if (h < 24) return "через " + h + " ч" + (m ? " " + m + " мин" : "");
+        const d = Math.floor(h / 24);
+        return "через " + d + " " + plural(d, "день", "дня", "дней");
+      }
+
+      function shortText(s, n) {
+        const first = String(s).split(". ")[0];
+        return first.length > n ? first.slice(0, n - 1) + "…" : first;
+      }
+
+      /* ---------- маршруты ---------- */
+      function routeLabelFromQuery(q) {
+        const t = String(q).trim();
+        const i = t.indexOf(",");
+        return (i > 0 ? t.slice(0, i) : t).trim() || "Маршрут";
+      }
+
+      function normalizeRouteItem(item) {
+        if (item == null) return null;
+        if (typeof item === "string") {
+          const query = item.trim();
+          return query ? { label: routeLabelFromQuery(query), query: query } : null;
+        }
+        if (Array.isArray(item) && item.length >= 2) {
+          const query = String(item[1]).trim();
+          if (!query) return null;
+          return { label: String(item[0]).trim() || routeLabelFromQuery(query), query: query };
+        }
+        return null;
+      }
+
+      function routesOf(i) {
+        const entry = window.EVENT_ROUTES && window.EVENT_ROUTES[i];
+        if (entry == null) return [];
+        if (!Array.isArray(entry)) {
+          const one = normalizeRouteItem(entry);
+          return one ? [one] : [];
+        }
+        if (entry.length === 2 && typeof entry[0] === "string" && typeof entry[1] === "string") {
+          const one = normalizeRouteItem(entry);
+          return one ? [one] : [];
+        }
+        return entry.map(normalizeRouteItem).filter(Boolean);
+      }
+
+      function mapsUrl(destination, lat, lng) {
+        let u = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination) + "&travelmode=driving&hl=ru";
+        if (lat != null && lng != null) u += "&origin=" + encodeURIComponent(lat + "," + lng);
+        return u;
+      }
+
+      function openRoute(query) {
+        const go = (lat, lng) => window.open(mapsUrl(query, lat, lng), "_blank", "noopener,noreferrer");
+        if (!navigator.geolocation) return go(null, null);
+        navigator.geolocation.getCurrentPosition(
+          (p) => go(p.coords.latitude, p.coords.longitude),
+          () => go(null, null),
+          { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+        );
+      }
+
+      /* ---------- состояние ---------- */
+      function state(now) {
+        let cur = null, next = null;
+        for (const it of items) {
+          if (it.ts <= now) cur = it;
+          else if (!next) next = it;
+        }
+        let phase = "during";
+        if (now < tripStart) phase = "before";
+        else if (now > tripEnd) phase = "after";
+        return { now, cur, next, phase };
+      }
+
+      function currentDay(st) {
+        if (st.phase === "before") return days[0];
+        if (st.phase === "after") return days[days.length - 1];
+        const d = pqcDate(st.now);
+        const hit = days.find((x) => dayDate[x] === d);
+        return hit || (st.cur ? st.cur.day : days[0]);
+      }
+
+      let selectedDay = null;
+      let lastHeroKey = "";
+
+      function ropeHtml(list, st) {
+        if (!list.length) return "";
+        let h = '<div class="rope" aria-hidden="true">';
+        list.forEach((it, k) => {
+          const done = it.ts <= st.now && !(st.cur && st.cur._i === it._i);
+          const isNow = st.cur && st.cur._i === it._i && st.phase === "during";
+          if (k) h += '<span class="rope-seg' + (it.ts <= st.now ? " is-done" : "") + '"></span>';
+          h += '<span class="rope-bead' + (isNow ? " is-now" : done ? " is-done" : "") + '"></span>';
+        });
+        h += "</div>";
+        h += '<div class="rope-legend"><span>' + esc(list[0].time) + "</span><span>" + esc(list[list.length - 1].time) + "</span></div>";
+        return h;
+      }
+
+      function renderHero(st) {
+        const day = currentDay(st);
+        const dayItems = items.filter((i) => i.day === day);
+        let html = "";
+
+        if (st.phase === "before") {
+          const diff = tripStart - st.now;
+          const s = Math.floor(diff / 1000);
+          const dd = Math.floor(s / 86400), hh = Math.floor((s % 86400) / 3600), mm = Math.floor((s % 3600) / 60), ss = s % 60;
+          const p2 = (v) => (v < 10 ? "0" : "") + v;
+          html =
+            '<div class="today-top"><span class="state-pill"><span class="dot"></span>До вылета</span><span class="today-day">VSV 5356 · 27 ноября</span></div>' +
+            '<div class="countdown" role="timer" aria-label="Обратный отсчёт до вылета">' +
+            "<div><b>" + p2(dd) + "</b><span>" + plural(dd, "день", "дня", "дней") + "</span></div>" +
+            "<div><b>" + p2(hh) + "</b><span>час</span></div>" +
+            "<div><b>" + p2(mm) + "</b><span>мин</span></div>" +
+            "<div><b>" + p2(ss) + "</b><span>сек</span></div></div>" +
+            '<p class="today-title">Астана 01:35 → Фукуок 11:05</p>' +
+            '<p class="today-now">В аэропорту быть к <b>22:30, 26 ноября</b> — за 3 часа до вылета.</p>' +
+            '<div class="today-actions"><a class="btn btn-primary" href="documents.html">' + I("ticket", "ic ic-sm") + "Билеты и документы</a>" +
+            '<button type="button" class="btn btn-on-water" data-open="0">План первого дня</button></div>';
+          todayEl.innerHTML = html;
+          return;
+        }
+
+        if (st.phase === "after") {
+          html =
+            '<div class="today-top"><span class="state-pill is-water"><span class="dot"></span>Поездка завершена</span><span class="today-day">7 дней на острове</span></div>' +
+            '<p class="today-time">7<small>дней</small></p>' +
+            '<p class="today-title">С возвращением! Маршрут остаётся здесь — на память.</p>' +
+            ropeHtml(dayItems, st);
+          todayEl.innerHTML = html;
+          return;
+        }
+
+        const nx = st.next;
+        const dp = dateParts(dayDate[day]);
+        const tomorrow = nx && nx.day !== day;
+        const pill = nx
+          ? '<span class="state-pill"><span class="dot"></span>' + (tomorrow ? "Завтра" : "Далее") + " · " + untilText(nx.ts - st.now) + "</span>"
+          : '<span class="state-pill is-water"><span class="dot"></span>Последний пункт</span>';
+        html =
+          '<div class="today-top">' + pill + '<span class="today-day">День ' + day + " · " + dp.n + " " + dp.m + "</span></div>";
+        if (nx) {
+          html += '<p class="today-time">' + esc(nx.time) + "</p>";
+          html += '<p class="today-title">' + esc(shortText(nx.program, 120)) + "</p>";
+        }
+        if (st.cur) html += '<p class="today-now">Сейчас: <b>' + esc(shortText(st.cur.program, 80)) + "</b></p>";
+        const target = nx || st.cur;
+        const r = target ? routesOf(target._i) : [];
+        const acts = [];
+        if (r.length) acts.push('<button type="button" class="btn btn-primary" data-route="' + target._i + '">' + I("navigate", "ic ic-sm") + "Маршрут</button>");
+        if (target && places[target._i]) acts.push('<button type="button" class="btn btn-on-water" data-open="' + target._i + '">Подробнее</button>');
+        if (acts.length) html += '<div class="today-actions">' + acts.join("") + "</div>";
+        html += ropeHtml(dayItems, st);
+        todayEl.innerHTML = html;
+      }
+
+      function renderDays(st) {
+        const today = st.phase === "during" ? currentDay(st) : null;
+        daysEl.innerHTML = days
+          .map((d) => {
+            const p = dateParts(dayDate[d]);
+            const bday = dayDate[d] === "2026-11-30";
+            return (
+              '<button type="button" class="day' + (d === today ? " is-today" : "") + '" data-day="' + d + '" aria-pressed="' + (d === selectedDay) + '" aria-label="День ' + d + ", " + p.n + " " + p.m + (bday ? ", день рождения" : "") + '">' +
+              '<span class="day-wd">' + p.wd + '</span><span class="day-num">' + p.n + "</span>" +
+              (bday ? I("cake", "ic") : "") +
+              "</button>"
+            );
+          })
+          .join("");
+      }
+
+      function evHtml(ev, st, showTag) {
+        const isNow = st.phase === "during" && st.cur && st.cur._i === ev._i;
+        const isNext = st.next && st.next._i === ev._i && st.phase !== "after";
+        const isPast = !isNow && ev.ts <= st.now;
+        const cls = isNow ? " is-now" : isNext ? " is-next" : isPast ? " is-past" : "";
+        const has = !!places[ev._i];
+        const r = routesOf(ev._i);
+        let acts = "";
+        if (r.length) acts += '<button type="button" class="mini" data-route="' + ev._i + '">' + I("navigate", "ic") + esc(r.length > 1 ? "Маршруты" : "Маршрут") + "</button>";
+        if (window.PLACE_AUDIO && window.PLACE_AUDIO[ev._i]) acts += '<span class="mini is-ghost">' + I("headphones", "ic") + "Аудиогид</span>";
+        if (has) acts += '<span class="mini is-ghost">Подробнее' + I("chevron", "ic") + "</span>";
+        const tag = showTag && isNow ? '<span class="ev-tag">Сейчас</span>' : showTag && isNext ? '<span class="ev-tag">Далее · ' + esc(untilText(ev.ts - st.now)) + "</span>" : "";
+        return (
+          '<li class="ev' + cls + '">' +
+          '<div class="ev-time">' + esc(ev.time) + (ev.tz ? "<small>Астана</small>" : "") + "</div>" +
+          '<div class="ev-rail"><i></i></div>' +
+          '<div class="ev-body' + (has ? " is-link" : "") + '"' + (has ? ' data-open="' + ev._i + '" role="button" tabindex="0" aria-label="Подробнее: ' + esc(shortText(ev.program, 60)) + '"' : "") + ">" +
+          tag +
+          '<p class="ev-prog">' + esc(ev.program) + "</p>" +
+          (ev.cost ? '<p class="ev-cost">' + esc(ev.cost) + "</p>" : "") +
+          (acts ? '<div class="ev-actions">' + acts + "</div>" : "") +
+          "</div></li>"
+        );
+      }
+
+      function renderSchedule(st) {
+        const q = qEl.value.trim().toLowerCase();
+        if (q) {
+          const hits = items.filter((i) => (i.program + " " + i.cost + " " + i.label).toLowerCase().includes(q));
+          if (!hits.length) {
+            scheduleEl.innerHTML = '<p class="empty">Ничего не нашлось по «' + esc(qEl.value) + "». Попробуйте другое слово: пляж, ужин, канатка.</p>";
+            return;
+          }
+          let h = "";
+          days.forEach((d) => {
+            const list = hits.filter((i) => i.day === d);
+            if (!list.length) return;
+            const p = dateParts(dayDate[d]);
+            h += '<h2 class="search-day">День ' + d + " · " + p.n + " " + p.m + "</h2>";
+            h += '<ol class="tl">' + list.map((e) => evHtml(e, st, false)).join("") + "</ol>";
+          });
+          scheduleEl.innerHTML = h;
+          return;
+        }
+        const list = items.filter((i) => i.day === selectedDay);
+        const p = dateParts(dayDate[selectedDay]);
+        scheduleEl.innerHTML =
+          '<div class="day-head"><h2>День ' + selectedDay + "</h2><span>" + p.wd + ", " + p.n + " " + p.m + " · " + list.length + " " + plural(list.length, "пункт", "пункта", "пунктов") + "</span></div>" +
+          '<ol class="tl">' + list.map((e) => evHtml(e, st, true)).join("") + "</ol>";
+      }
+
+      function renderAll() {
+        const st = state(clock());
+        if (selectedDay == null) selectedDay = currentDay(st);
+        const sub = $("appbar-sub");
+        if (st.phase === "during") {
+          const d = currentDay(st), p = dateParts(dayDate[d]);
+          sub.textContent = "День " + d + " из " + days.length + " · " + p.n + " " + p.m;
+        } else {
+          sub.textContent = "27 ноября – 3 декабря";
+        }
+        renderHero(st);
+        renderDays(st);
+        renderSchedule(st);
+      }
+
+      /* ---------- лист места ---------- */
+      const sheet = $("place-sheet");
+      const track = $("gallery-track");
+      const dots = $("gallery-dots");
+      const guide = $("guide");
+      const guidePlay = $("guide-play");
+      const guideTitle = $("guide-title");
+      const gProg = $("guide-progress");
+      const gCur = $("guide-cur");
+      const gDur = $("guide-dur");
+      const gBack = $("guide-back");
+      const gFwd = $("guide-fwd");
+      let guideSrc = null;
+      let dragging = false;
+
+      function fmt(sec) {
+        if (!isFinite(sec) || sec < 0) return "--:--";
+        const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+        return m + ":" + (s < 10 ? "0" : "") + s;
+      }
+
+      function sameSrc(a, b) {
+        try {
+          return new URL(a, location.href).href === new URL(b, location.href).href;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function guideActive() {
+        if (!window.SiteAudio || !guideSrc) return false;
+        return SiteAudio.getMode() === "guide" && sameSrc(guideSrc, SiteAudio.getElement().src);
+      }
+
+      function syncGuide() {
+        if (!guideSrc || !window.SiteAudio) return;
+        const playing = SiteAudio.isGuidePlaying(guideSrc);
+        guidePlay.innerHTML = I(playing ? "pause" : guideActive() ? "play" : "headphones", "ic");
+        guidePlay.setAttribute("aria-label", playing ? "Пауза" : guideActive() ? "Продолжить" : "Слушать аудиогид");
+        const on = guideActive();
+        const a = SiteAudio.getElement();
+        gProg.disabled = gBack.disabled = gFwd.disabled = !on;
+        gCur.textContent = on ? fmt(a.currentTime) : "0:00";
+        gDur.textContent = on ? fmt(a.duration) : "--:--";
+        if (on && !dragging && isFinite(a.duration) && a.duration > 0) gProg.value = String(Math.round((a.currentTime / a.duration) * 1000));
+        if (!on && !dragging) gProg.value = "0";
+      }
+
+      if (window.SiteAudio) SiteAudio.subscribe(syncGuide);
+
+      guidePlay.addEventListener("click", function () {
+        if (!guideSrc || !window.SiteAudio) return;
+        if (SiteAudio.isGuidePlaying(guideSrc)) SiteAudio.pause();
+        else SiteAudio.playGuide(guideSrc);
+        syncGuide();
+      });
+      gProg.addEventListener("input", function () {
+        if (!guideActive()) return;
+        dragging = true;
+        const d = SiteAudio.getElement().duration;
+        if (isFinite(d) && d > 0) SiteAudio.seek((gProg.value / 1000) * d);
+      });
+      gProg.addEventListener("change", function () {
+        dragging = false;
+        syncGuide();
+      });
+      [[gBack, -10], [gFwd, 10]].forEach(function (pair) {
+        pair[0].addEventListener("click", function () {
+          if (!guideActive()) return;
+          SiteAudio.seek(SiteAudio.getElement().currentTime + pair[1]);
+        });
+      });
+
+      function updateDots() {
+        const n = track.children.length;
+        if (n < 2) {
+          dots.innerHTML = "";
+          return;
+        }
+        const k = Math.round(track.scrollLeft / (track.clientWidth || 1));
+        dots.innerHTML = Array.from({ length: n }, (_, j) => '<i class="' + (j === k ? "is-on" : "") + '"></i>').join("");
+      }
+      track.addEventListener("scroll", updateDots, { passive: true });
+
+      function openPlace(i) {
+        const info = places[i];
+        const ev = items[i];
+        if (!info || !ev) return;
+        const imgs = (window.EVENT_IMAGES && window.EVENT_IMAGES[i]) || ["places/palm-beach.jpg"];
+        track.innerHTML = imgs.map((src, k) => '<img src="' + esc(src) + '" alt="' + (k === 0 ? esc(info.title) : "") + '" loading="' + (k ? "lazy" : "eager") + '" decoding="async" />').join("");
+        track.scrollLeft = 0;
+        updateDots();
+        $("place-title").textContent = info.title || "Справка";
+        const p = dateParts(ev.date);
+        $("place-meta").innerHTML =
+          '<span class="is-time">' + esc(ev.time) + (ev.tz ? " · Астана" : "") + "</span><span>День " + ev.day + " · " + p.n + " " + p.m + "</span>" + (ev.cost ? "<span>" + esc(ev.cost) + "</span>" : "");
+        let body = (info.paragraphs || []).map((t) => "<p>" + esc(t) + "</p>").join("");
+        if (info.tips && info.tips.length) {
+          body += '<div class="tips"><h3>Советы</h3><ul>' + info.tips.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul></div>";
+        }
+        $("place-body").innerHTML = body;
+
+        const audio = window.PLACE_AUDIO && window.PLACE_AUDIO[i];
+        guideSrc = audio || null;
+        guide.hidden = !audio;
+        if (audio) {
+          const base = audio.replace(/^.*\//, "").replace(/\.mp3$/i, "");
+          const t = (window.PLACE_AUDIO_TITLES && window.PLACE_AUDIO_TITLES[base]) || "Аудиогид";
+          guideTitle.innerHTML = esc(t) + "<small>Аудиогид · около 3 минут</small>";
+          syncGuide();
+        }
+
+        const r = routesOf(i);
+        $("routes").innerHTML = r.length
+          ? r.map((x, j) => '<button type="button" class="btn btn-primary" data-route="' + i + '" data-j="' + j + '">' + I("navigate", "ic ic-sm") + esc(r.length > 1 ? x.label : "Маршрут в Google Картах") + "</button>").join("") +
+            '<p class="routes-hint">Маршрут строится от вашего места — разрешите геолокацию.</p>'
+          : "";
+
+        AppSheet.open(sheet, {
+          onClose: function () {
+            if (window.SiteAudio) SiteAudio.stopGuide();
+            guideSrc = null;
+          },
+        });
+      }
+
+      /* ---------- события ---------- */
+      document.addEventListener("click", function (e) {
+        const rb = e.target.closest("[data-route]");
+        if (rb) {
+          e.stopPropagation();
+          const r = routesOf(+rb.getAttribute("data-route"));
+          const j = +(rb.getAttribute("data-j") || 0);
+          if (r[j]) openRoute(r[j].query);
+          return;
+        }
+        const ob = e.target.closest("[data-open]");
+        if (ob) {
+          const i = +ob.getAttribute("data-open");
+          if (places[i]) openPlace(i);
+          else {
+            selectedDay = items[i].day;
+            renderAll();
+            scheduleEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          return;
+        }
+        const db = e.target.closest("[data-day]");
+        if (db) {
+          selectedDay = +db.getAttribute("data-day");
+          qEl.value = "";
+          renderAll();
+        }
+      });
+
+      scheduleEl.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        const ob = e.target.closest("[data-open]");
+        if (!ob) return;
+        e.preventDefault();
+        openPlace(+ob.getAttribute("data-open"));
+      });
+
+      searchToggle.addEventListener("click", function () {
+        const show = searchWrap.hidden;
+        searchWrap.hidden = !show;
+        searchToggle.setAttribute("aria-pressed", String(show));
+        todayEl.hidden = show;
+        daysEl.hidden = show;
+        if (show) qEl.focus();
+        else {
+          qEl.value = "";
+          renderAll();
+        }
+      });
+      qEl.addEventListener("input", renderAll);
+
+      renderAll();
+      if (params.get("open") && places[+params.get("open")]) openPlace(+params.get("open"));
+      setInterval(function () {
+        const st = state(clock());
+        if (st.phase === "before") renderHero(st);
+        const key = st.phase + (st.cur ? st.cur._i : "-") + Math.floor(clock() / 60000);
+        if (key !== lastHeroKey) {
+          lastHeroKey = key;
+          renderAll();
+        }
+      }, 1000);
+    })();
+  </script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Фразы · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .sticky-tools {
+      position: sticky;
+      top: calc(var(--appbar-h) + var(--safe-t));
+      z-index: 10;
+      background: var(--deck);
+      padding: var(--u) 0 0;
+      margin-bottom: var(--u);
+    }
+
+    .sticky-tools .field {
+      margin-bottom: var(--u);
+    }
+
+    .ph {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0 var(--u);
+      align-items: center;
+      padding: calc(1.5 * var(--u)) var(--u) calc(1.5 * var(--u)) calc(2 * var(--u));
+      position: relative;
+    }
+
+    .ph + .ph::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(2 * var(--u));
+      right: 0;
+      border-top: 1px solid var(--grout);
+    }
+
+    .ph-vi {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+
+    .ph-tr {
+      margin: 3px 0 0;
+      font-size: 14px;
+      color: var(--coral);
+      font-weight: 600;
+    }
+
+    .ph-ru {
+      margin: 3px 0 0;
+      font-size: 14.5px;
+      color: var(--ink-2);
+    }
+
+    .ph-actions {
+      display: flex;
+      gap: 2px;
+    }
+
+    .ph-actions .icon-btn {
+      color: var(--water);
+    }
+
+    .cat-title {
+      margin: calc(3 * var(--u)) 0 var(--u) calc(0.5 * var(--u));
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
+    .empty {
+      padding: calc(4 * var(--u)) calc(2 * var(--u));
+      text-align: center;
+      color: var(--ink-2);
+    }
+
+    .show-panel {
+      min-height: 70dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding-top: calc(2 * var(--u));
+    }
+
+    .show-vi {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: clamp(40px, 12vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+
+    .show-tr {
+      margin: calc(2 * var(--u)) 0 0;
+      font-size: 20px;
+      font-weight: 650;
+      color: var(--coral);
+    }
+
+    .show-ru {
+      margin: var(--u) 0 calc(4 * var(--u));
+      font-size: 17px;
+      color: var(--ink-2);
+    }
+
+    .show-panel .btn {
+      align-self: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <h1 class="appbar-title">Фразы<span class="appbar-sub">Вьетнамский · транскрипция · перевод</span></h1>
+    </div>
+  </header>
+
+  <main class="app">
+    <div class="sticky-tools">
+      <label class="visually-hidden" for="ph-q">Найти фразу</label>
+      <input class="field" type="search" id="ph-q" placeholder="Найти: спасибо, счёт, сколько стоит…" autocomplete="off" enterkeyhint="search" />
+      <div class="chips" id="ph-cats" role="tablist" aria-label="Темы"></div>
+    </div>
+    <div id="ph-list"></div>
+    <p class="muted" style="margin-top: calc(2 * var(--u))">Во вьетнамском 6 тонов — транскрипция упрощённая. Кнопка со стрелками показывает фразу собеседнику крупно.</p>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <div class="sheet" id="show-sheet" hidden>
+    <div class="sheet-backdrop" data-sheet-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-label="Фраза крупно" tabindex="-1">
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <button type="button" class="sheet-close" data-sheet-close aria-label="Закрыть"><svg class="ic ic-sm" aria-hidden="true"><use href="#close" /></svg></button>
+      <div class="show-panel">
+        <p class="show-vi" id="show-vi" lang="vi"></p>
+        <p class="show-tr" id="show-tr"></p>
+        <p class="show-ru" id="show-ru"></p>
+        <button type="button" class="btn btn-primary" id="show-speak"><svg class="ic ic-sm" aria-hidden="true"><use href="#speaker" /></svg>Произнести</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="phrasebook.js"></script>
+  <script>
+    (function () {
+      const data = window.PHRASEBOOK || [];
+      const catsEl = document.getElementById("ph-cats");
+      const listEl = document.getElementById("ph-list");
+      const qEl = document.getElementById("ph-q");
+      const sheet = document.getElementById("show-sheet");
+      let cat = "all";
+      let current = null;
+
+      const esc = (t) => {
+        const d = document.createElement("div");
+        d.textContent = t;
+        return d.innerHTML;
+      };
+
+      const canSpeak = "speechSynthesis" in window;
+      let viVoice = null;
+      function pickVoice() {
+        viVoice = speechSynthesis.getVoices().find((v) => /^vi/i.test(v.lang)) || null;
+      }
+      if (canSpeak) {
+        pickVoice();
+        speechSynthesis.onvoiceschanged = pickVoice;
+      }
+      function speak(text) {
+        if (!canSpeak) return;
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+        u.lang = "vi-VN";
+        if (viVoice) u.voice = viVoice;
+        u.rate = 0.85;
+        speechSynthesis.speak(u);
+      }
+
+      catsEl.innerHTML =
+        '<button type="button" class="chip" role="tab" data-cat="all" aria-selected="true">Все</button>' +
+        data.map((c) => '<button type="button" class="chip" role="tab" data-cat="' + c.id + '" aria-selected="false">' + esc(c.title) + "</button>").join("");
+
+      function phraseHtml(p, ci, pi) {
+        return (
+          '<div class="ph">' +
+          '<div><p class="ph-vi" lang="vi">' + esc(p.vi) + '</p><p class="ph-tr">' + esc(p.tr) + '</p><p class="ph-ru">' + esc(p.ru) + "</p></div>" +
+          '<div class="ph-actions">' +
+          (canSpeak ? '<button type="button" class="icon-btn" data-speak="' + ci + ":" + pi + '" aria-label="Произнести: ' + esc(p.ru) + '">' + AppIcon("speaker") + "</button>" : "") +
+          '<button type="button" class="icon-btn" data-show="' + ci + ":" + pi + '" aria-label="Показать крупно: ' + esc(p.ru) + '">' + AppIcon("expand") + "</button>" +
+          "</div></div>"
+        );
+      }
+
+      function render() {
+        const q = qEl.value.trim().toLowerCase();
+        let html = "";
+        let count = 0;
+        data.forEach((c, ci) => {
+          if (cat !== "all" && c.id !== cat) return;
+          const rows = c.phrases
+            .map((p, pi) => ({ p, pi }))
+            .filter(({ p }) => !q || (p.vi + " " + p.tr + " " + p.ru).toLowerCase().includes(q));
+          if (!rows.length) return;
+          count += rows.length;
+          html += '<h2 class="cat-title">' + esc(c.title) + '</h2><div class="group">' + rows.map(({ p, pi }) => phraseHtml(p, ci, pi)).join("") + "</div>";
+        });
+        listEl.innerHTML = count ? html : '<p class="empty">Такой фразы нет. Попробуйте другое слово или тему «Все».</p>';
+      }
+
+      function get(ref) {
+        const parts = ref.split(":").map(Number);
+        return data[parts[0]].phrases[parts[1]];
+      }
+
+      document.addEventListener("click", function (e) {
+        const c = e.target.closest("[data-cat]");
+        if (c) {
+          cat = c.getAttribute("data-cat");
+          catsEl.querySelectorAll("[data-cat]").forEach((b) => b.setAttribute("aria-selected", String(b === c)));
+          render();
+          return;
+        }
+        const s = e.target.closest("[data-speak]");
+        if (s) {
+          speak(get(s.getAttribute("data-speak")).vi);
+          return;
+        }
+        const sh = e.target.closest("[data-show]");
+        if (sh) {
+          current = get(sh.getAttribute("data-show"));
+          document.getElementById("show-vi").textContent = current.vi;
+          document.getElementById("show-tr").textContent = current.tr;
+          document.getElementById("show-ru").textContent = current.ru;
+          document.getElementById("show-speak").hidden = !canSpeak;
+          AppSheet.open(sheet);
+        }
+      });
+      document.getElementById("show-speak").addEventListener("click", () => current && speak(current.vi));
+      qEl.addEventListener("input", render);
+      render();
+    })();
+  </script>
+  <script src="register-sw.js"></script>
+</body>
+</html>

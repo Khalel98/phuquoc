@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1620" />
+  <title>Валюта · Фукуок</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .calc {
+      margin-top: var(--u);
+      padding: calc(2 * var(--u));
+    }
+
+    .seg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      border-radius: 14px;
+      background: rgba(10, 22, 32, 0.6);
+      border: 1px solid var(--grout);
+    }
+
+    .seg button {
+      min-height: 40px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--ink-2);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .seg button[aria-pressed="true"] {
+      background: var(--water);
+      color: var(--on-accent);
+    }
+
+    .amount {
+      display: flex;
+      align-items: baseline;
+      gap: var(--u);
+      margin: calc(2 * var(--u)) 0 0;
+      border-bottom: 2px solid var(--grout);
+      padding-bottom: var(--u);
+    }
+
+    .amount:focus-within {
+      border-bottom-color: var(--water);
+    }
+
+    .amount input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: clamp(40px, 13vw, 56px);
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      padding: 0;
+    }
+
+    .amount input:focus {
+      outline: none;
+    }
+
+    .amount span {
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--coral);
+    }
+
+    .quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: calc(1.5 * var(--u));
+    }
+
+    .quick .chip {
+      min-height: 34px;
+      background: transparent;
+    }
+
+    .results {
+      margin-top: calc(2 * var(--u));
+    }
+
+    .res {
+      display: flex;
+      align-items: center;
+      gap: calc(1.5 * var(--u));
+      padding: calc(2 * var(--u));
+      position: relative;
+    }
+
+    .res + .res::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(2 * var(--u));
+      right: 0;
+      border-top: 1px solid var(--grout);
+    }
+
+    .res-code {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 22px;
+      background: var(--shallow-soft);
+      color: var(--water);
+      flex-shrink: 0;
+    }
+
+    .res-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .res-val {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 26px;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+      overflow-wrap: anywhere;
+    }
+
+    .res-name {
+      margin: 2px 0 0;
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    .res.is-src {
+      display: none;
+    }
+
+    .rate-line {
+      display: flex;
+      align-items: center;
+      gap: var(--u);
+      margin-top: calc(2 * var(--u));
+    }
+
+    .rate-line p {
+      flex: 1;
+      margin: 0;
+    }
+
+    .tips-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tips-list li {
+      padding: calc(1.5 * var(--u)) calc(2 * var(--u));
+      font-size: 14.5px;
+      position: relative;
+    }
+
+    .tips-list li + li::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(2 * var(--u));
+      right: 0;
+      border-top: 1px solid var(--grout);
+    }
+
+    .tips-list b {
+      font-family: var(--font-mark);
+      color: var(--coral);
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <h1 class="appbar-title">Валюта<span class="appbar-sub">Донг · доллар · тенге</span></h1>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="pool calc" aria-label="Пересчёт">
+      <div class="seg" role="group" aria-label="Из какой валюты">
+        <button type="button" data-cur="VND" aria-pressed="true">₫ Донг</button>
+        <button type="button" data-cur="USD" aria-pressed="false">$ Доллар</button>
+        <button type="button" data-cur="KZT" aria-pressed="false">₸ Тенге</button>
+      </div>
+      <label class="amount">
+        <span class="visually-hidden">Сумма</span>
+        <input type="text" id="amount" value="100 000" inputmode="decimal" autocomplete="off" />
+        <span id="cur-sign">₫</span>
+      </label>
+      <div class="quick" id="quick"></div>
+    </section>
+
+    <div class="group results" id="results">
+      <div class="res" data-res="VND"><span class="res-code">₫</span><div class="res-body"><p class="res-val" id="outVnd">—</p><p class="res-name">Вьетнамский донг</p></div></div>
+      <div class="res" data-res="USD"><span class="res-code">$</span><div class="res-body"><p class="res-val" id="outUsd">—</p><p class="res-name">Доллар США</p></div></div>
+      <div class="res" data-res="KZT"><span class="res-code">₸</span><div class="res-body"><p class="res-val" id="outKzt">—</p><p class="res-name">Казахстанский тенге</p></div></div>
+    </div>
+
+    <div class="rate-line">
+      <p class="muted" id="rateDate">Загрузка курса…</p>
+      <button type="button" class="icon-btn" id="refresh" aria-label="Обновить курс"><svg class="ic" aria-hidden="true"><use href="#refresh" /></svg></button>
+    </div>
+    <p class="err" id="rateErr" hidden></p>
+
+    <h2 class="h-section">Как читать цены</h2>
+    <div class="group">
+      <ul class="tips-list">
+        <li><b>150k</b> на ценнике — это 150 000 ₫.</li>
+        <li>Купюры 10 000 и 200 000, 20 000 и 500 000 ₫ похожи по цвету — считайте нули.</li>
+        <li>Доллары выгоднее менять в городе, в лицензированных обменниках, с паспортом.</li>
+      </ul>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-inner">
+      <a class="tab" href="index.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#route" /></svg></span>Маршрут</a>
+      <a class="tab" href="documents.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#docs" /></svg></span>Документы</a>
+      <a class="tab" href="razgovornik.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#phrases" /></svg></span>Фразы</a>
+      <a class="tab" href="converter.html" aria-current="page"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#currency" /></svg></span>Валюта</a>
+      <a class="tab" href="more.html"><span class="tab-ic"><svg class="ic" aria-hidden="true"><use href="#more" /></svg></span>Ещё</a>
+    </div>
+  </nav>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const API = "https://latest.currency-api.pages.dev/v1/currencies/usd.json";
+      const RATES_LS = "phuquoc-rates-v1";
+      const SIGN = { VND: "₫", USD: "$", KZT: "₸" };
+      const QUICK = {
+        VND: [50000, 100000, 200000, 500000, 1000000],
+        USD: [10, 20, 50, 100],
+        KZT: [5000, 10000, 20000, 50000],
+      };
+      let vndPerUsd = null;
+      let kztPerUsd = null;
+      let from = "VND";
+
+      const amountEl = document.getElementById("amount");
+      const rateDateEl = document.getElementById("rateDate");
+      const rateErrEl = document.getElementById("rateErr");
+      const out = { VND: document.getElementById("outVnd"), USD: document.getElementById("outUsd"), KZT: document.getElementById("outKzt") };
+
+      const fmt = (n, cur) => {
+        if (!isFinite(n)) return "—";
+        if (cur === "VND") return Math.round(n).toLocaleString("ru-RU");
+        if (cur === "KZT") return Math.round(n).toLocaleString("ru-RU");
+        return n.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      };
+      const short = (n, cur) => (cur === "VND" ? (n >= 1000000 ? n / 1000000 + "M" : n / 1000 + "k") : n.toLocaleString("ru-RU")) + " " + SIGN[cur];
+
+      function parseAmount() {
+        const raw = String(amountEl.value).replace(/\s/g, "").replace(",", ".").replace(/k$/i, "000");
+        const v = parseFloat(raw);
+        return isFinite(v) ? v : 0;
+      }
+
+      function toUsd(a, c) {
+        if (c === "USD") return a;
+        if (c === "VND") return a / vndPerUsd;
+        return a / kztPerUsd;
+      }
+
+      function compute() {
+        document.querySelectorAll("[data-res]").forEach((el) => el.classList.toggle("is-src", el.getAttribute("data-res") === from));
+        if (vndPerUsd == null || kztPerUsd == null) return;
+        const usd = toUsd(parseAmount(), from);
+        out.USD.textContent = fmt(usd, "USD") + " $";
+        out.VND.textContent = fmt(usd * vndPerUsd, "VND") + " ₫";
+        out.KZT.textContent = fmt(usd * kztPerUsd, "KZT") + " ₸";
+      }
+
+      function renderQuick() {
+        document.getElementById("quick").innerHTML = QUICK[from]
+          .map((n) => '<button type="button" class="chip" data-q="' + n + '">' + short(n, from) + "</button>")
+          .join("");
+        document.getElementById("cur-sign").textContent = SIGN[from];
+      }
+
+      function rateText(prefix) {
+        return prefix + ": 1 $ = " + fmt(vndPerUsd, "VND") + " ₫ · " + fmt(kztPerUsd, "KZT") + " ₸";
+      }
+
+      function loadRatesFromStorage() {
+        try {
+          const o = JSON.parse(localStorage.getItem(RATES_LS) || "null");
+          if (!o || o.vnd == null || o.kzt == null) return false;
+          vndPerUsd = Number(o.vnd);
+          kztPerUsd = Number(o.kzt);
+          rateDateEl.textContent = rateText("Сохранённый курс от " + (o.savedAt || "—"));
+          compute();
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      async function loadRates() {
+        rateErrEl.hidden = true;
+        rateDateEl.textContent = "Загрузка курса…";
+        try {
+          const r = await fetch(API);
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          const j = await r.json();
+          const u = j.usd || j.USD;
+          if (!u || u.vnd == null || u.kzt == null) throw new Error("no fields");
+          vndPerUsd = Number(u.vnd);
+          kztPerUsd = Number(u.kzt);
+          rateDateEl.textContent = rateText("Курс на " + (j.date || "сегодня"));
+          try {
+            localStorage.setItem(
+              RATES_LS,
+              JSON.stringify({ vnd: vndPerUsd, kzt: kztPerUsd, apiDate: j.date || "", savedAt: new Date().toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" }) })
+            );
+          } catch (e) {
+            /* хранилище недоступно */
+          }
+          compute();
+        } catch (e) {
+          if (loadRatesFromStorage()) {
+            rateErrEl.hidden = false;
+            rateErrEl.textContent = "Нет сети — считаю по последнему сохранённому курсу.";
+          } else {
+            rateDateEl.textContent = "";
+            rateErrEl.hidden = false;
+            rateErrEl.textContent = "Курс не загрузился: нет интернета. Подключитесь и нажмите «Обновить».";
+          }
+        }
+      }
+
+      document.addEventListener("click", function (e) {
+        const c = e.target.closest("[data-cur]");
+        if (c) {
+          from = c.getAttribute("data-cur");
+          document.querySelectorAll("[data-cur]").forEach((b) => b.setAttribute("aria-pressed", String(b === c)));
+          amountEl.value = from === "VND" ? "100 000" : from === "USD" ? "10" : "5 000";
+          renderQuick();
+          compute();
+          return;
+        }
+        const q = e.target.closest("[data-q]");
+        if (q) {
+          amountEl.value = Number(q.getAttribute("data-q")).toLocaleString("ru-RU");
+          compute();
+        }
+      });
+      amountEl.addEventListener("input", compute);
+      amountEl.addEventListener("focus", () => amountEl.select());
+      document.getElementById("refresh").addEventListener("click", loadRates);
+      renderQuick();
+      compute();
+      loadRates();
+    })();
+  </script>
+  <script src="register-sw.js"></script>
+</body>
+</html>
