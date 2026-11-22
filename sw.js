@@ -1,4 +1,4 @@
-const CACHE_NAME = "phuquoc-trip-v8";
+const CACHE_NAME = "phuquoc-trip-v9";
 
 function asset(path) {
   return new URL(path, self.location).href;
@@ -9,6 +9,8 @@ const PRECACHE = [
   "more.html",
   "app.js",
   "icons.svg",
+  "favicon.svg",
+  "apple-touch-icon.png",
   "css/fonts.css",
   "fonts/rubik-latin.woff2",
   "fonts/rubik-latin-ext.woff2",
