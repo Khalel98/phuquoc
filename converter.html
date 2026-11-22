@@ -219,7 +219,7 @@
 
     <div class="rate-line">
       <p class="muted" id="rateDate">Загрузка курса…</p>
-      <button type="button" class="icon-btn" id="refresh" aria-label="Обновить курс"><svg class="ic" aria-hidden="true"><use href="#refresh" /></svg></button>
+      <button type="button" class="icon-btn" id="refresh-btn" aria-label="Обновить курс"><svg class="ic" aria-hidden="true"><use href="#refresh" /></svg></button>
     </div>
     <p class="err" id="rateErr" hidden></p>
 
@@ -368,7 +368,7 @@
       });
       amountEl.addEventListener("input", compute);
       amountEl.addEventListener("focus", () => amountEl.select());
-      document.getElementById("refresh").addEventListener("click", loadRates);
+      document.getElementById("refresh-btn").addEventListener("click", loadRates);
       renderQuick();
       compute();
       loadRates();

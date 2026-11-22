@@ -12,7 +12,7 @@
       gap: calc(1.5 * var(--u));
     }
 
-    #docs > .group-title:first-child {
+    #doc-list > .group-title:first-child {
       margin-top: calc(1.5 * var(--u));
     }
 
@@ -206,7 +206,7 @@
   </header>
 
   <main class="app">
-    <div id="docs"></div>
+    <div id="doc-list"></div>
 
     <h2 class="group-title">Рейсы и отель</h2>
     <div class="legs">
@@ -336,7 +336,7 @@
         d.textContent = t;
         return d.innerHTML;
       };
-      document.getElementById("docs").innerHTML = SECTIONS.map(
+      document.getElementById("doc-list").innerHTML = SECTIONS.map(
         (s) =>
           '<h2 class="group-title">' + esc(s.title) + '</h2><div class="group">' +
           s.docs
@@ -369,7 +369,7 @@
           a.remove();
           setTimeout(() => URL.revokeObjectURL(url), 10000);
         };
-        document.getElementById("docs").addEventListener("click", (e) => {
+        document.getElementById("doc-list").addEventListener("click", (e) => {
           const link = e.target.closest(".doc-dl");
           if (!link) return;
           e.preventDefault();
