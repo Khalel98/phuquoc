@@ -80,55 +80,132 @@
       color: var(--water);
     }
 
-    /* поездка — одна карточка */
-    .trip {
-      padding: 0;
-    }
-
-    .trip-row {
+    .legs {
       display: grid;
-      grid-template-columns: 64px 1fr auto;
-      align-items: center;
       gap: calc(1.5 * var(--u));
-      padding: calc(1.5 * var(--u)) calc(2 * var(--u));
-      position: relative;
     }
 
-    .trip-row + .trip-row::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: calc(2 * var(--u));
-      right: 0;
-      border-top: 1px solid var(--grout);
+    .leg {
+      padding: calc(2 * var(--u));
     }
 
-    .trip-label {
+    .leg-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 650;
       color: var(--ink-2);
     }
 
-    .trip-main {
+    .leg-code {
+      font-family: var(--font-mark);
+      font-weight: 700;
+      color: var(--coral);
+      font-size: 15px;
+    }
+
+    .leg-main {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: var(--u);
+      margin-top: calc(1.5 * var(--u));
+    }
+
+    .leg-pt b {
+      display: block;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 34px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .leg-pt span {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    .leg-pt.is-end {
+      text-align: right;
+    }
+
+    .leg-plane {
+      color: var(--water);
+      margin-bottom: 22px;
+    }
+
+    .leg-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: calc(1.5 * var(--u));
+      padding-top: calc(1.5 * var(--u));
+      border-top: 1px dashed var(--grout);
+    }
+
+    .leg-foot span {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 7px;
+      background: rgba(10, 22, 32, 0.5);
+      color: var(--ink-2);
+    }
+
+    .hotel {
+      margin-top: calc(1.5 * var(--u));
+      padding: calc(2 * var(--u));
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--u) calc(2 * var(--u));
+      align-items: center;
+    }
+
+    .hotel h2 {
       margin: 0;
       font-family: var(--font-mark);
       font-weight: 800;
-      font-size: 18px;
+      font-size: 19px;
       line-height: 1.2;
-      font-variant-numeric: tabular-nums;
     }
 
-    .trip-sub {
-      margin: 2px 0 0;
-      font-size: 13px;
+    .hotel p {
+      margin: 4px 0 0;
+      font-size: 13.5px;
       color: var(--ink-2);
     }
 
-    .trip-code {
+    .hotel-times {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--u);
+    }
+
+    .hotel-times div {
+      padding: var(--u) calc(1.5 * var(--u));
+      border-radius: 12px;
+      background: var(--deck-2);
+    }
+
+    .hotel-times b {
+      display: block;
       font-family: var(--font-mark);
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--coral);
+      font-weight: 800;
+      font-size: 20px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hotel-times span {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-2);
     }
 
     .row-num {
@@ -187,27 +264,43 @@
     <h2 class="group-title">Для всех</h2>
     <div class="group" id="common-docs"></div>
 
-    <h2 class="group-title">Поездка</h2>
-    <div class="card trip">
-      <div class="trip-row">
-        <span class="trip-label">Туда<br />пт 27.11</span>
-        <div><p class="trip-main">01:35 → 11:05</p><p class="trip-sub">Астана → Фукуок · в аэропорту к 22:30</p></div>
-        <span class="trip-code">VSV 5356</span>
-      </div>
-      <div class="trip-row">
-        <span class="trip-label">Обратно<br />чт 03.12</span>
-        <div><p class="trip-main">16:00 → 00:05</p><p class="trip-sub">Фукуок → Астана · в аэропорту к 13:00</p></div>
-        <span class="trip-code">VSV 5339</span>
-      </div>
-      <div class="trip-row">
-        <span class="trip-label">Отель</span>
-        <div><p class="trip-main">Wyndham Grand</p><p class="trip-sub">Заезд после 15:00 · выезд до 12:00</p></div>
-        <a class="icon-btn" href="https://www.google.com/maps/search/?api=1&query=Wyndham+Grand+Phu+Quoc" target="_blank" rel="noopener" aria-label="Отель на карте" style="background: var(--shallow-soft); color: var(--water)">
-          <svg class="ic" aria-hidden="true"><use href="#navigate" /></svg>
-        </a>
-      </div>
+    <h2 class="group-title">Рейсы и отель</h2>
+    <div class="legs">
+      <article class="pool leg" aria-label="Рейс туда">
+        <div class="leg-top"><span>Туда · пт, 27 ноября</span><span class="leg-code">VSV 5356</span></div>
+        <div class="leg-main">
+          <div class="leg-pt"><b>01:35</b><span>Астана · NQZ</span></div>
+          <svg class="ic leg-plane" aria-hidden="true"><use href="#plane" /></svg>
+          <div class="leg-pt is-end"><b>11:05</b><span>Фукуок · PQC</span></div>
+        </div>
+        <div class="leg-foot"><span>SCAT</span><span>Багаж 23 кг</span><span>Ручная кладь 5 кг</span><span>В аэропорту к 22:30</span></div>
+      </article>
+      <article class="pool leg" aria-label="Рейс обратно">
+        <div class="leg-top"><span>Обратно · чт, 3 декабря</span><span class="leg-code">VSV 5339</span></div>
+        <div class="leg-main">
+          <div class="leg-pt"><b>16:00</b><span>Фукуок · PQC</span></div>
+          <svg class="ic leg-plane" aria-hidden="true"><use href="#plane" /></svg>
+          <div class="leg-pt is-end"><b>00:05</b><span>Астана · 4 дек</span></div>
+        </div>
+        <div class="leg-foot"><span>SCAT</span><span>Выезд из отеля до 12:00</span><span>В аэропорту к 13:00</span></div>
+      </article>
     </div>
-    <p class="muted" style="margin: var(--u) 0 0 calc(0.5 * var(--u))">Багаж 23 кг + ручная кладь 5 кг на человека. Виза не нужна. Вейпы и IQOS ввозить запрещено.</p>
+
+    <article class="card hotel" aria-label="Отель">
+      <div>
+        <h2>Wyndham Grand Phu Quoc</h2>
+        <p>Бай Зай, север острова · Deluxe Garden View · завтраки</p>
+      </div>
+      <a class="icon-btn" href="https://www.google.com/maps/search/?api=1&query=Wyndham+Grand+Phu+Quoc" target="_blank" rel="noopener" aria-label="Отель на карте" style="background: var(--shallow-soft); color: var(--water)">
+        <svg class="ic" aria-hidden="true"><use href="#navigate" /></svg>
+      </a>
+      <div class="hotel-times">
+        <div><b>15:00</b><span>Заезд 27.11 · после</span></div>
+        <div><b>12:00</b><span>Выезд 03.12 · до</span></div>
+      </div>
+    </article>
+
+    <p class="muted" style="margin: var(--u) 0 0 calc(0.5 * var(--u))">Виза не нужна. Вейпы и IQOS ввозить запрещено.</p>
 
     <h2 class="group-title">Позвонить</h2>
     <div class="group">
