@@ -9,136 +9,31 @@
   <title>Документы · Фукуок</title>
   <link rel="stylesheet" href="css/common.css" />
   <style>
-    .legs {
+    .who {
       display: grid;
-      gap: calc(1.5 * var(--u));
-    }
-
-    #doc-list > .group-title:first-child {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
       margin-top: calc(1.5 * var(--u));
+      padding: 4px;
+      border-radius: 14px;
+      background: var(--tile);
+      border: 1px solid var(--grout);
     }
 
-    .leg {
-      padding: calc(2 * var(--u));
-    }
-
-    .leg-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      font-weight: 650;
+    .who button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
       color: var(--ink-2);
-    }
-
-    .leg-code {
-      font-family: var(--font-mark);
       font-weight: 700;
-      color: var(--coral);
       font-size: 15px;
+      cursor: pointer;
     }
 
-    .leg-main {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: end;
-      gap: var(--u);
-      margin-top: calc(1.5 * var(--u));
-    }
-
-    .leg-pt b {
-      display: block;
-      font-family: var(--font-mark);
-      font-weight: 800;
-      font-size: 34px;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.02em;
-    }
-
-    .leg-pt span {
-      display: block;
-      margin-top: 4px;
-      font-size: 13px;
-      color: var(--ink-2);
-      font-weight: 600;
-    }
-
-    .leg-pt.is-end {
-      text-align: right;
-    }
-
-    .leg-plane {
-      color: var(--water);
-      padding-bottom: 22px;
-    }
-
-    .leg-foot {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: calc(1.5 * var(--u));
-      padding-top: calc(1.5 * var(--u));
-      border-top: 1px dashed var(--grout);
-    }
-
-    .leg-foot span {
-      font-size: 12.5px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 7px;
-      background: rgba(10, 22, 32, 0.5);
-      color: var(--ink-2);
-    }
-
-    .hotel {
-      margin-top: calc(1.5 * var(--u));
-      padding: calc(2 * var(--u));
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: var(--u) calc(2 * var(--u));
-      align-items: center;
-    }
-
-    .hotel h2 {
-      margin: 0;
-      font-family: var(--font-mark);
-      font-weight: 800;
-      font-size: 19px;
-      line-height: 1.2;
-    }
-
-    .hotel p {
-      margin: 4px 0 0;
-      font-size: 13.5px;
-      color: var(--ink-2);
-    }
-
-    .hotel-times {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--u);
-    }
-
-    .hotel-times div {
-      padding: var(--u) calc(1.5 * var(--u));
-      border-radius: 12px;
-      background: var(--deck-2);
-    }
-
-    .hotel-times b {
-      display: block;
-      font-family: var(--font-mark);
-      font-weight: 800;
-      font-size: 20px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .hotel-times span {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ink-2);
+    .who button[aria-pressed="true"] {
+      background: var(--water);
+      color: var(--on-accent);
     }
 
     .group-title {
@@ -150,13 +45,8 @@
       color: var(--ink-2);
     }
 
-    .pdf-tag {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 5px;
-      background: var(--deck-2);
-      color: var(--ink-2);
+    .person-docs {
+      margin-top: calc(2 * var(--u));
     }
 
     .doc-row {
@@ -190,6 +80,57 @@
       color: var(--water);
     }
 
+    /* поездка — одна карточка */
+    .trip {
+      padding: 0;
+    }
+
+    .trip-row {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      align-items: center;
+      gap: calc(1.5 * var(--u));
+      padding: calc(1.5 * var(--u)) calc(2 * var(--u));
+      position: relative;
+    }
+
+    .trip-row + .trip-row::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc(2 * var(--u));
+      right: 0;
+      border-top: 1px solid var(--grout);
+    }
+
+    .trip-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-2);
+    }
+
+    .trip-main {
+      margin: 0;
+      font-family: var(--font-mark);
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1.2;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .trip-sub {
+      margin: 2px 0 0;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .trip-code {
+      font-family: var(--font-mark);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--coral);
+    }
+
     .row-num {
       font-family: var(--font-mark);
       font-weight: 700;
@@ -198,53 +139,75 @@
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
     }
+
+    .receipts {
+      margin-top: calc(3 * var(--u));
+    }
+
+    .receipts summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 calc(0.5 * var(--u));
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .receipts summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .receipts summary .ic {
+      transform: rotate(90deg);
+      transition: transform 0.2s;
+    }
+
+    .receipts[open] summary .ic {
+      transform: rotate(-90deg);
+    }
   </style>
 </head>
 <body>
   <header class="appbar">
     <div class="appbar-inner">
-      <h1 class="appbar-title">Документы<span class="appbar-sub">Бронь FUN&amp;SUN № 12522784</span></h1>
+      <h1 class="appbar-title">Документы<span class="appbar-sub">Выберите, чьи документы нужны</span></h1>
     </div>
   </header>
 
   <main class="app">
-    <div id="doc-list"></div>
+    <div class="who" role="group" aria-label="Чьи документы" id="who"></div>
+    <div class="group person-docs" id="doc-list" aria-live="polite"></div>
 
-    <h2 class="group-title">Рейсы и отель</h2>
-    <div class="legs">
-      <article class="pool leg" aria-label="Рейс туда">
-        <div class="leg-top"><span>Туда · пт, 27 ноября</span><span class="leg-code">VSV 5356</span></div>
-        <div class="leg-main">
-          <div class="leg-pt"><b>01:35</b><span>Астана · NQZ</span></div>
-          <svg class="ic leg-plane" aria-hidden="true"><use href="#plane" /></svg>
-          <div class="leg-pt is-end"><b>11:05</b><span>Фукуок · PQC</span></div>
-        </div>
-        <div class="leg-foot"><span>SCAT</span><span>Багаж 23 кг</span><span>Ручная кладь 5 кг</span><span>В аэропорту к 22:30</span></div>
-      </article>
-      <article class="pool leg" aria-label="Рейс обратно">
-        <div class="leg-top"><span>Обратно · чт, 3 декабря</span><span class="leg-code">VSV 5339</span></div>
-        <div class="leg-main">
-          <div class="leg-pt"><b>16:00</b><span>Фукуок · PQC</span></div>
-          <svg class="ic leg-plane" aria-hidden="true"><use href="#plane" /></svg>
-          <div class="leg-pt is-end"><b>00:05</b><span>Астана · 4 дек</span></div>
-        </div>
-        <div class="leg-foot"><span>SCAT</span><span>Выезд из отеля до 12:00</span><span>В аэропорту к 13:00</span></div>
-      </article>
+    <h2 class="group-title">Для всех</h2>
+    <div class="group" id="common-docs"></div>
+
+    <h2 class="group-title">Поездка</h2>
+    <div class="card trip">
+      <div class="trip-row">
+        <span class="trip-label">Туда<br />пт 27.11</span>
+        <div><p class="trip-main">01:35 → 11:05</p><p class="trip-sub">Астана → Фукуок · в аэропорту к 22:30</p></div>
+        <span class="trip-code">VSV 5356</span>
+      </div>
+      <div class="trip-row">
+        <span class="trip-label">Обратно<br />чт 03.12</span>
+        <div><p class="trip-main">16:00 → 00:05</p><p class="trip-sub">Фукуок → Астана · в аэропорту к 13:00</p></div>
+        <span class="trip-code">VSV 5339</span>
+      </div>
+      <div class="trip-row">
+        <span class="trip-label">Отель</span>
+        <div><p class="trip-main">Wyndham Grand</p><p class="trip-sub">Заезд после 15:00 · выезд до 12:00</p></div>
+        <a class="icon-btn" href="https://www.google.com/maps/search/?api=1&query=Wyndham+Grand+Phu+Quoc" target="_blank" rel="noopener" aria-label="Отель на карте" style="background: var(--shallow-soft); color: var(--water)">
+          <svg class="ic" aria-hidden="true"><use href="#navigate" /></svg>
+        </a>
+      </div>
     </div>
-
-    <article class="card hotel" aria-label="Отель">
-      <div>
-        <h2>Wyndham Grand Phu Quoc</h2>
-        <p>Бай Зай, север острова · Deluxe Garden View · завтраки</p>
-      </div>
-      <a class="icon-btn" href="https://www.google.com/maps/search/?api=1&query=Wyndham+Grand+Phu+Quoc" target="_blank" rel="noopener" aria-label="Отель на карте" style="background: var(--shallow-soft); color: var(--water)">
-        <svg class="ic" aria-hidden="true"><use href="#navigate" /></svg>
-      </a>
-      <div class="hotel-times">
-        <div><b>15:00</b><span>Заезд 27.11 · после</span></div>
-        <div><b>12:00</b><span>Выезд 03.12 · до</span></div>
-      </div>
-    </article>
+    <p class="muted" style="margin: var(--u) 0 0 calc(0.5 * var(--u))">Багаж 23 кг + ручная кладь 5 кг на человека. Виза не нужна. Вейпы и IQOS ввозить запрещено.</p>
 
     <h2 class="group-title">Позвонить</h2>
     <div class="group">
@@ -255,33 +218,27 @@
       </a>
       <a class="row" href="tel:+902423102826">
         <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#shield" /></svg></span>
-        <span class="row-body"><p class="row-title">Страховая · Remed</p><p class="row-sub">Болезнь или травма — звонить сразу</p></span>
+        <span class="row-body"><p class="row-title">Страховая Remed</p><p class="row-sub">Болезнь или травма</p></span>
         <span class="row-num">+90 242 310 28 26</span>
-      </a>
-      <a class="row" href="https://wa.me/41788560742" target="_blank" rel="noopener">
-        <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#message" /></svg></span>
-        <span class="row-body"><p class="row-title">Remed в WhatsApp</p><p class="row-sub">Только текстом</p></span>
-        <span class="row-num">+41 78 856 07 42</span>
       </a>
       <a class="row" href="tel:+84903471666">
         <span class="row-ic"><svg class="ic" aria-hidden="true"><use href="#passport" /></svg></span>
-        <span class="row-body"><p class="row-title">Посольство РК · дежурный</p><p class="row-sub">Ханой · основной +84 24 3771 3836</p></span>
+        <span class="row-body"><p class="row-title">Посольство РК</p><p class="row-sub">Дежурный, Ханой</p></span>
         <span class="row-num">+84 90 347 1666</span>
       </a>
       <a class="row" href="tel:115">
         <span class="row-ic is-coral"><svg class="ic" aria-hidden="true"><use href="#alert" /></svg></span>
-        <span class="row-body"><p class="row-title">Экстренные службы</p><p class="row-sub">Полиция 113 · Пожарные 114 · Общий 112</p></span>
-        <span class="row-num">Скорая 115</span>
+        <span class="row-body"><p class="row-title">Скорая</p><p class="row-sub">Полиция 113 · пожарные 114</p></span>
+        <span class="row-num">115</span>
       </a>
     </div>
 
-    <p class="note">
-      <svg class="ic" aria-hidden="true"><use href="#alert" /></svg>
-      <span>Виза не нужна (до 30 дней). Вейпы, IQOS и glo ввозить <b>запрещено</b>. Вывозить нельзя: дуриан, джекфрут, арбуз, кокос, рыбный соус.</span>
-    </p>
+    <details class="receipts">
+      <summary>Чеки оплаты тура<svg class="ic ic-sm" aria-hidden="true"><use href="#chevron" /></svg></summary>
+      <div class="group" id="receipt-docs"></div>
+    </details>
 
-
-    <p class="muted" style="margin-top: calc(2 * var(--u))">PDF открываются и без интернета, если сайт хотя бы раз открывали онлайн. На регистрации нужны оригиналы паспортов.</p>
+    <p class="muted" style="margin-top: calc(2 * var(--u))">На регистрации нужны оригиналы паспортов. PDF открываются и без интернета, если сайт хотя бы раз открывали онлайн.</p>
   </main>
 
   <nav class="tabbar" aria-label="Разделы">
@@ -297,64 +254,98 @@
   <script src="app.js"></script>
   <script>
     (function () {
-      const SECTIONS = [
+      const TICKET = "Туда и обратно · VSV 5356 / 5339";
+      const INSURANCE = "Remed · 30 000 $";
+      const PEOPLE = [
         {
-          title: "Авиабилеты",
+          id: "khalel",
+          name: "Халел",
           docs: [
-            { icon: "ticket", title: "Билет — Халел", desc: "VSV 5356 / VSV 5339", file: "docs/ticket-khalel.pdf" },
-            { icon: "ticket", title: "Билет — Акын", desc: "VSV 5356 / VSV 5339", file: "docs/ticket-akyn.pdf" },
+            { icon: "ticket", title: "Билет", desc: TICKET, file: "docs/ticket-khalel.pdf" },
+            { icon: "shield", title: "Страховка", desc: INSURANCE, file: "docs/insurance-khalel.pdf" },
+            { icon: "bed", title: "Ваучер отеля", desc: "Номер с Акыном · бронь 12522784", file: "docs/voucher-hotel.pdf" },
+            { icon: "passport", title: "Скан паспорта", desc: "На случай потери", file: "docs/passport-khalel.pdf" },
           ],
         },
         {
-          title: "Отель",
-          docs: [{ icon: "bed", title: "Ваучер Wyndham Grand", desc: "27.11–03.12 · номер и трансферы", file: "docs/voucher-hotel.pdf" }],
-        },
-        {
-          title: "Страховки · Nomad",
+          id: "akyn",
+          name: "Акын",
           docs: [
-            { icon: "shield", title: "Страховка — Халел", desc: "Вьетнам · 30 000 $", file: "docs/insurance-khalel.pdf" },
-            { icon: "shield", title: "Страховка — Акын", desc: "Вьетнам · 30 000 $", file: "docs/insurance-akyn.pdf" },
+            { icon: "ticket", title: "Билет", desc: TICKET, file: "docs/ticket-akyn.pdf" },
+            { icon: "shield", title: "Страховка", desc: INSURANCE, file: "docs/insurance-akyn.pdf" },
+            { icon: "bed", title: "Ваучер отеля", desc: "Номер с Халелом · бронь 12522784", file: "docs/voucher-hotel.pdf" },
           ],
         },
         {
-          title: "Личные",
-          docs: [{ icon: "passport", title: "Паспорт — Халел", desc: "Скан на случай потери", file: "docs/passport-khalel.pdf" }],
-        },
-        {
-          title: "Памятка",
-          docs: [{ icon: "book", title: "Памятка FUN&SUN", desc: "Виза, деньги, правила, контакты", file: "docs/memo-vietnam.pdf", size: "5,7 МБ" }],
-        },
-        {
-          title: "Оплата тура",
+          id: "alisher",
+          name: "Алишер",
           docs: [
-            { icon: "receipt", title: "350 000 ₸", desc: "Kaspi · Nash Tour · 20 октября", file: "docs/payment-tour-1.pdf" },
-            { icon: "receipt", title: "751 000 ₸", desc: "Kaspi · Nash Tour · 27 октября", file: "docs/payment-tour-2.pdf" },
-            { icon: "receipt", title: "385 273 ₸", desc: "Перевод Акына · Halyk · 24 октября", file: "docs/transfer-akyn.pdf" },
+            { icon: "ticket", title: "Билет", desc: TICKET, file: "docs/ticket-alisher.pdf" },
+            { icon: "shield", title: "Страховка", desc: INSURANCE, file: "docs/insurance-alisher.pdf" },
+            { icon: "bed", title: "Ваучер отеля", desc: "Номер с Аидой · бронь 12523606", file: "docs/voucher-hotel-2.pdf" },
+          ],
+        },
+        {
+          id: "aida",
+          name: "Аида",
+          docs: [
+            { icon: "ticket", title: "Билет", desc: TICKET, file: "docs/ticket-aida.pdf" },
+            { icon: "shield", title: "Страховка", desc: INSURANCE, file: "docs/insurance-aida.pdf" },
+            { icon: "bed", title: "Ваучер отеля", desc: "Номер с Алишером · бронь 12523606", file: "docs/voucher-hotel-2.pdf" },
           ],
         },
       ];
+      const COMMON = [{ icon: "book", title: "Памятка FUN&SUN", desc: "Виза, деньги, правила · 5,7 МБ", file: "docs/memo-vietnam.pdf" }];
+      const RECEIPTS = [
+        { icon: "receipt", title: "350 000 ₸", desc: "Kaspi · Nash Tour · 20 октября", file: "docs/payment-tour-1.pdf" },
+        { icon: "receipt", title: "751 000 ₸", desc: "Kaspi · Nash Tour · 27 октября", file: "docs/payment-tour-2.pdf" },
+        { icon: "receipt", title: "385 273 ₸", desc: "Перевод Акына · Halyk · 24 октября", file: "docs/transfer-akyn.pdf" },
+      ];
+      const LS_KEY = "phuquoc-docs-person";
+
       const esc = (t) => {
         const d = document.createElement("div");
         d.textContent = t;
         return d.innerHTML;
       };
-      document.getElementById("doc-list").innerHTML = SECTIONS.map(
-        (s) =>
-          '<h2 class="group-title">' + esc(s.title) + '</h2><div class="group">' +
-          s.docs
-            .map(
-              (d) =>
-                '<div class="row doc-row">' +
-                '<a class="doc-open" href="' + d.file + '" target="_blank" rel="noopener">' +
-                '<span class="row-ic">' + AppIcon(d.icon) + "</span>" +
-                '<span class="row-body"><p class="row-title">' + esc(d.title) + '</p><p class="row-sub">' + esc(d.desc) + "</p></span>" +
-                '<span class="row-end"><span class="pdf-tag">' + (d.size ? "PDF · " + esc(d.size) : "PDF") + "</span></span></a>" +
-                '<a class="icon-btn doc-dl" href="' + d.file + '" download="' + esc(d.title.replace(/[\\/:*?"<>|]/g, "")) + '.pdf" aria-label="Скачать: ' + esc(d.title) + '">' +
-                AppIcon("download") + "</a></div>"
-            )
-            .join("") +
-          "</div>"
-      ).join("");
+      const fileName = (d, owner) => (owner ? d.title + " — " + owner : d.title).replace(/[\\/:*?"<>|]/g, "") + ".pdf";
+      const row = (d, owner) =>
+        '<div class="row doc-row">' +
+        '<a class="doc-open" href="' + d.file + '" target="_blank" rel="noopener">' +
+        '<span class="row-ic">' + AppIcon(d.icon) + "</span>" +
+        '<span class="row-body"><p class="row-title">' + esc(d.title) + '</p><p class="row-sub">' + esc(d.desc) + "</p></span></a>" +
+        '<a class="icon-btn doc-dl" href="' + d.file + '" download="' + esc(fileName(d, owner)) + '" aria-label="Скачать: ' + esc(d.title) + '">' +
+        AppIcon("download") + "</a></div>";
+
+      const whoEl = document.getElementById("who");
+      const listEl = document.getElementById("doc-list");
+
+      function show(id) {
+        const p = PEOPLE.find((x) => x.id === id) || PEOPLE[0];
+        whoEl.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.who === p.id)));
+        listEl.innerHTML = p.docs.map((d) => row(d, p.name)).join("");
+        try {
+          localStorage.setItem(LS_KEY, p.id);
+        } catch (e) {
+          /* хранилище недоступно */
+        }
+      }
+
+      whoEl.innerHTML = PEOPLE.map((p) => '<button type="button" data-who="' + p.id + '" aria-pressed="false">' + esc(p.name) + "</button>").join("");
+      whoEl.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-who]");
+        if (b) show(b.dataset.who);
+      });
+      document.getElementById("common-docs").innerHTML = COMMON.map((d) => row(d)).join("");
+      document.getElementById("receipt-docs").innerHTML = RECEIPTS.map((d) => row(d, "чек")).join("");
+
+      let saved = null;
+      try {
+        saved = localStorage.getItem(LS_KEY);
+      } catch (e) {
+        /* хранилище недоступно */
+      }
+      show(saved);
 
       // При открытии через file:// браузер игнорирует download — сохраняем PDF через blob.
       if (location.protocol === "file:") {
@@ -371,7 +362,7 @@
           a.remove();
           setTimeout(() => URL.revokeObjectURL(url), 10000);
         };
-        document.getElementById("doc-list").addEventListener("click", (e) => {
+        document.addEventListener("click", (e) => {
           const link = e.target.closest(".doc-dl");
           if (!link) return;
           e.preventDefault();

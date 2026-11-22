@@ -1,4 +1,4 @@
-const CACHE_NAME = "phuquoc-trip-v9";
+const CACHE_NAME = "phuquoc-trip-v10";
 
 function asset(path) {
   return new URL(path, self.location).href;
@@ -26,6 +26,11 @@ const PRECACHE = [
   "docs/payment-tour-1.pdf",
   "docs/payment-tour-2.pdf",
   "docs/transfer-akyn.pdf",
+  "docs/ticket-alisher.pdf",
+  "docs/ticket-aida.pdf",
+  "docs/voucher-hotel-2.pdf",
+  "docs/insurance-alisher.pdf",
+  "docs/insurance-aida.pdf",
   "razgovornik.html",
   "converter.html",
   "pogoda.html",
