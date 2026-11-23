@@ -30,121 +30,121 @@ window.EVENT_IMAGES = [
   ],
   /* 7 */ null,
   /* 8 */ null,
-  /* 9 */ [
-    "places/hotel.jpg"
-  ],
-  /* 10 */ [
+  /* 9 */ null,
+  /* 10 */ null,
+  /* 11 */ [
     "places/safari.jpg"
   ],
-  /* 11 */ null,
-  /* 12 */ [
+  /* 12 */ null,
+  /* 13 */ null,
+  /* 14 */ [
     "places/vinwonders.jpg"
   ],
-  /* 13 */ [
-    "places/grand-world.jpg",
-    "places/fireworks.jpg"
-  ],
-  /* 14 */ null,
-  /* 15 */ [
+  /* 15 */ null,
+  /* 16 */ null,
+  /* 17 */ null,
+  /* 18 */ null,
+  /* 19 */ [
     "places/long-beach.jpg"
   ],
-  /* 16 */ [
+  /* 20 */ null,
+  /* 21 */ [
     "places/cable-car.jpg",
     "places/hon-thom.jpg"
   ],
-  /* 17 */ [
+  /* 22 */ [
     "places/water-park.jpg",
     "places/hon-thom.jpg"
   ],
-  /* 18 */ [
+  /* 23 */ [
     "places/hon-thom.jpg",
     "places/restaurant-vn.jpg"
   ],
-  /* 19 */ [
-    "places/sunset-town.jpg",
-    "places/kiss-bridge.jpg"
-  ],
-  /* 20 */ [
-    "places/fireworks.jpg",
-    "places/kiss-bridge.jpg"
-  ],
-  /* 21 */ [
-    "places/sunset-town.jpg",
-    "places/restaurant-vn.jpg"
-  ],
-  /* 22 */ null,
-  /* 23 */ [
-    "places/an-thoi-islands.jpg",
-    "places/snorkeling.jpg",
-    "places/fishing-boats.jpg"
-  ],
-  /* 24 */ [
-    "places/seafood-grill.jpg",
-    "places/an-thoi-islands.jpg"
-  ],
+  /* 24 */ null,
   /* 25 */ null,
   /* 26 */ [
-    "places/sunset-beach.jpg",
-    "places/restaurant-vn.jpg"
+    "places/sunset-town.jpg",
+    "places/kiss-bridge.jpg"
   ],
   /* 27 */ [
-    "places/massage-spa.jpg"
+    "places/sunset-town.jpg",
+    "places/restaurant-vn.jpg"
   ],
   /* 28 */ null,
   /* 29 */ [
+    "places/fireworks.jpg",
+    "places/kiss-bridge.jpg"
+  ],
+  /* 30 */ null,
+  /* 31 */ null,
+  /* 32 */ null,
+  /* 33 */ null,
+  /* 34 */ null,
+  /* 35 */ null,
+  /* 36 */ null,
+  /* 37 */ [
+    "places/sunset-beach.jpg",
+    "places/restaurant-vn.jpg"
+  ],
+  /* 38 */ null,
+  /* 39 */ null,
+  /* 40 */ null,
+  /* 41 */ null,
+  /* 42 */ [
     "places/sao-beach.jpg",
     "places/palm-beach.jpg"
   ],
-  /* 30 */ [
+  /* 43 */ [
     "places/restaurant-vn.jpg",
     "places/sao-beach.jpg"
   ],
-  /* 31 */ [
+  /* 44 */ [
     "places/ho-quoc-pagoda.jpg"
   ],
-  /* 32 */ [
+  /* 45 */ [
     "places/prison.jpg"
   ],
-  /* 33 */ [
-    "places/fish-sauce.jpg",
-    "places/pepper-farm.jpg"
-  ],
-  /* 34 */ [
-    "places/ham-ninh.jpg",
-    "places/crab-dish.jpg"
-  ],
-  /* 35 */ null,
-  /* 36 */ [
+  /* 46 */ null,
+  /* 47 */ null,
+  /* 48 */ null,
+  /* 49 */ null,
+  /* 50 */ null,
+  /* 51 */ [
     "places/starfish.jpg"
   ],
-  /* 37 */ [
+  /* 52 */ [
     "places/seafood-grill.jpg",
     "places/starfish.jpg"
   ],
-  /* 38 */ [
+  /* 53 */ null,
+  /* 54 */ [
     "places/vn-coffee.jpg",
     "places/resort-pool.jpg"
   ],
-  /* 39 */ [
-    "places/dinh-cau.jpg",
-    "places/fishing-boats.jpg"
+  /* 55 */ [
+    "places/grand-world.jpg"
   ],
-  /* 40 */ [
-    "places/night-market.jpg",
-    "places/seafood-grill.jpg"
+  /* 56 */ null,
+  /* 57 */ [
+    "places/grand-world.jpg",
+    "places/fireworks.jpg"
   ],
-  /* 41 */ [
-    "places/hotel.jpg"
-  ],
-  /* 42 */ null,
-  /* 43 */ [
+  /* 58 */ null,
+  /* 59 */ null,
+  /* 60 */ null,
+  /* 61 */ null,
+  /* 62 */ [
     "places/duong-dong-market.jpg",
     "places/pepper-farm.jpg"
   ],
-  /* 44 */ [
+  /* 63 */ null,
+  /* 64 */ [
     "places/hotel.jpg"
   ],
-  /* 45 */ [
+  /* 65 */ [
+    "places/hotel.jpg"
+  ],
+  /* 66 */ [
     "places/pqc-airport.jpg"
   ],
 ];
